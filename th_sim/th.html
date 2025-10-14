@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Anomaly Detection - Threat Hunting</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #22d3ee;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+
+        .difficulty-section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .difficulty-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-header h3 {
+            font-size: 1.2rem;
+        }
+
+        .difficulty-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .difficulty-badge.easy { background: #064e3b; color: #6ee7b7; }
+        .difficulty-badge.medium { background: #713f12; color: #fde047; }
+        .difficulty-badge.hard { background: #7f1d1d; color: #fca5a5; }
+
+        .difficulty-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .difficulty-btn {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #475569;
+            background: #334155;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn:hover {
+            border-color: #64748b;
+        }
+
+        .difficulty-btn.active.easy {
+            border-color: #10b981;
+            background: #064e3b;
+            color: #6ee7b7;
+        }
+
+        .difficulty-btn.active.medium {
+            border-color: #eab308;
+            background: #713f12;
+            color: #fde047;
+        }
+
+        .difficulty-btn.active.hard {
+            border-color: #ef4444;
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .difficulty-btn-title {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .difficulty-btn-desc {
+            font-size: 0.75rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .stat-sub {
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .status-banner {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-banner.idle {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        .status-banner.baseline {
+            background: #064e3b;
+            border-color: #10b981;
+        }
+
+        .status-banner.anomaly {
+            background: #713f12;
+            border-color: #f59e0b;
+        }
+
+        .status-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .chart-section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-section h3 {
+            margin-bottom: 1rem;
+        }
+
+        .activity-log {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .activity-log-header {
+            padding: 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .activity-log-body {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+        }
+
+        .activity-item {
+            padding: 0.5rem;
+            margin-bottom: 0.25rem;
+            border-radius: 0.25rem;
+            border: 1px solid #475569;
+            background: #334155;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .activity-item.malicious {
+            background: #7f1d1d;
+            border-color: #ef4444;
+            font-weight: 600;
+        }
+
+        .activity-item.legitimate-high {
+            background: #713f12;
+            border-color: #ca8a04;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:disabled {
+            background: #334155;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+
+        .btn-warning {
+            background: #ea580c;
+            color: white;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: #c2410c;
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-toggle {
+            background: #334155;
+            color: #cbd5e1;
+        }
+
+        .btn-toggle.active {
+            background: #dc2626;
+            color: white;
+        }
+
+        .explanation {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .explanation h3 {
+            margin-bottom: 1rem;
+        }
+
+        .explanation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .explanation-item h4 {
+            color: #22d3ee;
+            margin-bottom: 0.5rem;
+        }
+
+        .explanation-item p {
+            color: #cbd5e1;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        canvas {
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Statistical Anomaly Detection</h1>
+            <p>30-Day Baseline Analysis - Finding the Needle in the Haystack</p>
+        </div>
+
+        <div class="difficulty-section">
+            <div class="difficulty-header">
+                <h3>Difficulty Level</h3>
+                <span class="difficulty-badge easy" id="difficultyBadge">Easy</span>
+            </div>
+            <p class="stat-sub" id="difficultyDesc">Only malicious activities stand out</p>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn active easy" onclick="setDifficulty('easy', this)">
+                    <div class="difficulty-btn-title">Easy</div>
+                    <div class="difficulty-btn-desc">Only malicious activities are anomalies</div>
+                </button>
+                <button class="difficulty-btn" onclick="setDifficulty('medium', this)">
+                    <div class="difficulty-btn-title">Medium</div>
+                    <div class="difficulty-btn-desc">~8% legitimate outliers added</div>
+                </button>
+                <button class="difficulty-btn" onclick="setDifficulty('hard', this)">
+                    <div class="difficulty-btn-title">Hard</div>
+                    <div class="difficulty-btn-desc">~15% legitimate outliers - realistic noise</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="stats-grid hidden" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">Total Activities</div>
+                <div class="stat-value" id="totalActivities">0</div>
+                <div class="stat-sub">Over 30 days</div>
+            </div>
+            <div class="stat-card" style="border-color: #3b82f6;">
+                <div class="stat-label">Baseline Mean</div>
+                <div class="stat-value" style="color: #60a5fa;" id="meanValue">0</div>
+                <div class="stat-sub">Average risk score</div>
+            </div>
+            <div class="stat-card" style="border-color: #eab308;">
+                <div class="stat-label">Std Deviation (σ)</div>
+                <div class="stat-value" style="color: #facc15;" id="stdDevValue">0</div>
+                <div class="stat-sub">Variability measure</div>
+            </div>
+            <div class="stat-card" style="border-color: #ef4444;">
+                <div class="stat-label">Threshold (3σ)</div>
+                <div class="stat-value" style="color: #f87171;" id="thresholdValue">0</div>
+                <div class="stat-sub">Anomaly detection line</div>
+            </div>
+            <div class="stat-card hidden" id="maliciousCard" style="border-color: #f97316;">
+                <div class="stat-label">Malicious Events</div>
+                <div class="stat-value" style="color: #fb923c;" id="maliciousCount">0</div>
+                <div class="stat-sub">Hidden in noise</div>
+            </div>
+        </div>
+
+        <div class="status-banner idle" id="statusBanner">
+            <div>
+                <div class="status-title" id="statusTitle">READY TO BEGIN</div>
+                <div class="stat-sub" id="statusDesc">Collect 30 days of baseline data to establish normal behavior patterns</div>
+            </div>
+            <button class="btn btn-toggle hidden" id="revealBtn" onclick="toggleReveal()">
+                👁️ Reveal Anomalies
+            </button>
+        </div>
+
+        <div class="chart-section hidden" id="chartSection">
+            <h3>30-Day Risk Score Analysis</h3>
+            <canvas id="riskChart"></canvas>
+        </div>
+
+        <div class="activity-log hidden" id="activityLog">
+            <div class="activity-log-header">
+                <h3>Activity Log (<span id="logCount">0</span> events over 30 days)</h3>
+                <p class="stat-sub" id="logDesc">Malicious activities are the only outliers</p>
+            </div>
+            <div class="activity-log-body" id="activityLogBody">
+                <div style="text-align: center; padding: 3rem; color: #64748b;">
+                    No activity yet. Start baseline collection to begin monitoring.
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="collectBtn" onclick="collectBaseline()">
+                📅 Collect 30-Day Baseline
+            </button>
+            <button class="btn btn-warning" id="injectBtn" onclick="injectAnomalies()" disabled>
+                ⚠️ Inject Anomalies
+            </button>
+            <button class="btn btn-secondary" onclick="reset()">
+                🔄 Reset
+            </button>
+        </div>
+
+        <div class="explanation">
+            <h3>The Needle in the Haystack Problem</h3>
+            <div class="explanation-grid">
+                <div class="explanation-item">
+                    <h4>1. Establish Baseline (30 Days)</h4>
+                    <p>Collect normal activity from all three departments. Calculate mean and standard deviation to understand typical behavior patterns.</p>
+                </div>
+                <div class="explanation-item">
+                    <h4>2. Real-World Complexity</h4>
+                    <p>In realistic environments (Medium/Hard), legitimate unusual activities occur regularly - large file transfers, backups, bulk exports. These create "noise" that makes threat hunting challenging.</p>
+                </div>
+                <div class="explanation-item">
+                    <h4>3. Context-Aware Detection</h4>
+                    <p>Statistical outliers (3σ) identify candidates for investigation. Analysts must then use context to distinguish between legitimate business activities and actual threats.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let activities = [];
+        let chart = null;
+        let phase = 'idle';
+        let difficulty = 'easy';
+        let showAnomalies = false;
+        let stats = { mean: 0, stdDev: 0, threshold: 0 };
+
+        const normalBehaviors = {
+            branch: {
+                websites: ['salesforce.com', 'linkedin.com', 'zoom.us', 'slack.com', 'hubspot.com'],
+                downloads: ['customer_report.pdf', 'sales_data.xlsx', 'meeting_notes.docx', 'proposal.pptx']
+            },
+            accounting: {
+                websites: ['quickbooks.com', 'irs.gov', 'bankofamerica.com', 'adp.com', 'xero.com'],
+                downloads: ['invoice_2024.pdf', 'payroll.xlsx', 'tax_forms.pdf', 'expense_report.xlsx']
+            },
+            dev: {
+                websites: ['github.com', 'stackoverflow.com', 'aws.amazon.com', 'docker.com', 'npmjs.com'],
+                downloads: ['package.json', 'requirements.txt', 'deploy_script.sh', 'config.yaml']
+            }
+        };
+
+        const anomalies = [
+            { dept: 'branch', type: 'website', value: 'suspicious-market1ng.ru', score: 95, day: 18 },
+            { dept: 'accounting', type: 'download', value: 'encrypted_payload.exe', score: 98, day: 23 }
+        ];
+
+        const legitimateOutliers = {
+            branch: [
+                { type: 'download', value: 'large_video_presentation.mp4', score: 65 },
+                { type: 'website', value: 'webex.com', score: 58 },
+                { type: 'download', value: 'quarterly_report_final_v8.pptx', score: 62 }
+            ],
+            accounting: [
+                { type: 'download', value: 'annual_audit_2024_complete.zip', score: 70 },
+                { type: 'website', value: 'sec.gov', score: 55 },
+                { type: 'download', value: 'all_invoices_q4.xlsx', score: 64 }
+            ],
+            dev: [
+                { type: 'download', value: 'production_database_backup.sql', score: 72 },
+                { type: 'website', value: 'kubernetes.io', score: 60 },
+                { type: 'download', value: 'node_modules.tar.gz', score: 68 }
+            ]
+        };
+
+        const difficultySettings = {
+            easy: { outlierChance: 0, label: 'Easy', description: 'Only malicious activities stand out' },
+            medium: { outlierChance: 0.08, label: 'Medium', description: 'Some legitimate unusual activities mixed in' },
+            hard: { outlierChance: 0.15, label: 'Hard', description: 'Many legitimate outliers - realistic environment' }
+        };
+
+        function setDifficulty(level, element) {
+            difficulty = level;
+            document.querySelectorAll('.difficulty-btn').forEach(function(btn) {
+                btn.classList.remove('active', 'easy', 'medium', 'hard');
+            });
+            element.classList.add('active', level);
+            
+            const badge = document.getElementById('difficultyBadge');
+            badge.className = 'difficulty-badge ' + level;
+            badge.textContent = difficultySettings[level].label;
+            document.getElementById('difficultyDesc').textContent = difficultySettings[level].description;
+            
+            if (phase !== 'idle') {
+                reset();
+            }
+        }
+
+        function generateActivity(day, isAnomaly, anomalyData) {
+            isAnomaly = isAnomaly || false;
+            anomalyData = anomalyData || null;
+            
+            const depts = ['branch', 'accounting', 'dev'];
+            const dept = anomalyData ? anomalyData.dept : depts[Math.floor(Math.random() * depts.length)];
+            const behavior = normalBehaviors[dept];
+            const user = dept + '_user' + (Math.floor(Math.random() * 5) + 1);
+
+            if (isAnomaly && anomalyData) {
+                return {
+                    day: day,
+                    dept: dept,
+                    user: user,
+                    type: anomalyData.type,
+                    value: anomalyData.value,
+                    score: anomalyData.score,
+                    isAnomaly: true,
+                    isMalicious: true
+                };
+            }
+
+            const settings = difficultySettings[difficulty];
+            const shouldBeOutlier = Math.random() < settings.outlierChance;
+
+            if (shouldBeOutlier) {
+                const outlier = legitimateOutliers[dept][Math.floor(Math.random() * legitimateOutliers[dept].length)];
+                return {
+                    day: day,
+                    dept: dept,
+                    user: user,
+                    type: outlier.type,
+                    value: outlier.value,
+                    score: outlier.score + Math.floor(Math.random() * 8) - 4,
+                    isAnomaly: false,
+                    isMalicious: false
+                };
+            }
+
+            const type = Math.random() > 0.5 ? 'website' : 'download';
+            const value = type === 'website' 
+                ? behavior.websites[Math.floor(Math.random() * behavior.websites.length)]
+                : behavior.downloads[Math.floor(Math.random() * behavior.downloads.length)];
+            const score = Math.floor(Math.random() * 20) + 8;
+
+            return {
+                day: day,
+                dept: dept,
+                user: user,
+                type: type,
+                value: value,
+                score: score,
+                isAnomaly: false,
+                isMalicious: false
+            };
+        }
+
+        function calculateStats(data) {
+            const normalScores = data.filter(function(a) { return !a.isAnomaly; }).map(function(a) { return a.score; });
+            if (normalScores.length === 0) return { mean: 0, stdDev: 0, threshold: 0 };
+
+            const mean = normalScores.reduce(function(sum, val) { return sum + val; }, 0) / normalScores.length;
+            const variance = normalScores.reduce(function(sum, val) { return sum + Math.pow(val - mean, 2); }, 0) / normalScores.length;
+            const stdDev = Math.sqrt(variance);
+            const threshold = mean + (3 * stdDev);
+
+            return { mean: mean, stdDev: stdDev, threshold: threshold };
+        }
+
+        function collectBaseline() {
+            showAnomalies = false;
+            activities = [];
+            
+            for (let day = 1; day <= 30; day++) {
+                const activitiesPerDay = Math.floor(Math.random() * 3) + 2;
+                for (let i = 0; i < activitiesPerDay; i++) {
+                    activities.push(generateActivity(day, false, null));
+                }
+            }
+            
+            stats = calculateStats(activities);
+            phase = 'baseline-complete';
+            updateUI();
+            renderChart();
+            renderActivityLog();
+        }
+
+        function injectAnomalies() {
+            anomalies.forEach(function(anomaly) {
+                activities.push(generateActivity(anomaly.day, true, anomaly));
+            });
+            
+            activities.sort(function(a, b) { return a.day - b.day; });
+            stats = calculateStats(activities);
+            phase = 'anomaly-injected';
+            updateUI();
+            renderChart();
+            renderActivityLog();
+        }
+
+        function reset() {
+            activities = [];
+            phase = 'idle';
+            showAnomalies = false;
+            stats = { mean: 0, stdDev: 0, threshold: 0 };
+            if (chart) chart.destroy();
+            updateUI();
+        }
+
+        function toggleReveal() {
+            showAnomalies = !showAnomalies;
+            const btn = document.getElementById('revealBtn');
+            btn.textContent = showAnomalies ? '👁️ Hide Anomalies' : '👁️ Reveal Anomalies';
+            btn.classList.toggle('active');
+            renderChart();
+            renderActivityLog();
+        }
+
+        function updateUI() {
+            if (phase !== 'idle') {
+                document.getElementById('statsGrid').classList.remove('hidden');
+                document.getElementById('totalActivities').textContent = activities.length;
+                document.getElementById('meanValue').textContent = stats.mean.toFixed(1);
+                document.getElementById('stdDevValue').textContent = stats.stdDev.toFixed(1);
+                document.getElementById('thresholdValue').textContent = stats.threshold.toFixed(1);
+                
+                if (phase === 'anomaly-injected') {
+                    const maliciousCard = document.getElementById('maliciousCard');
+                    maliciousCard.classList.remove('hidden');
+                    const maliciousCount = activities.filter(function(a) { return a.isAnomaly; }).length;
+                    document.getElementById('maliciousCount').textContent = maliciousCount;
+                }
+            } else {
+                document.getElementById('statsGrid').classList.add('hidden');
+            }
+
+            const banner = document.getElementById('statusBanner');
+            const title = document.getElementById('statusTitle');
+            const desc = document.getElementById('statusDesc');
+            const revealBtn = document.getElementById('revealBtn');
+
+            banner.className = 'status-banner';
+            if (phase === 'idle') {
+                banner.classList.add('idle');
+                title.textContent = 'READY TO BEGIN';
+                desc.textContent = 'Collect 30 days of baseline data to establish normal behavior patterns';
+                revealBtn.classList.add('hidden');
+            } else if (phase === 'baseline-complete') {
+                banner.classList.add('baseline');
+                title.textContent = '✓ 30-DAY BASELINE ESTABLISHED';
+                desc.textContent = 'Mean: ' + stats.mean.toFixed(1) + ' | σ: ' + stats.stdDev.toFixed(1) + ' | Threshold: ' + stats.threshold.toFixed(1) + ' | Ready to detect anomalies';
+                revealBtn.classList.add('hidden');
+            } else if (phase === 'anomaly-injected') {
+                banner.classList.add('anomaly');
+                const maliciousCount = activities.filter(function(a) { return a.isAnomaly; }).length;
+                const legitimateHighScores = activities.filter(function(a) { return !a.isAnomaly && !a.isMalicious && a.score > stats.threshold; }).length;
+                title.textContent = '30-DAY PERIOD COMPLETE - ' + maliciousCount + ' Malicious Events';
+                desc.textContent = legitimateHighScores > 0 
+                    ? maliciousCount + ' malicious + ' + legitimateHighScores + ' legitimate outliers hidden among ' + (activities.length - maliciousCount - legitimateHighScores) + ' normal activities'
+                    : 'Anomalies hidden among ' + (activities.length - maliciousCount) + ' normal activities. Use "Reveal" to highlight them.';
+                revealBtn.classList.remove('hidden');
+            }
+
+            document.getElementById('collectBtn').disabled = phase !== 'idle';
+            document.getElementById('injectBtn').disabled = phase !== 'baseline-complete';
+
+            if (phase === 'idle') {
+                document.getElementById('chartSection').classList.add('hidden');
+                document.getElementById('activityLog').classList.add('hidden');
+            } else {
+                document.getElementById('chartSection').classList.remove('hidden');
+                document.getElementById('activityLog').classList.remove('hidden');
+            }
+        }
+
+        function renderChart() {
+            const chartData = Array.from({ length: 30 }, function(_, i) {
+                const day = i + 1;
+                const dayActivities = activities.filter(function(a) { return a.day === day; });
+                const hasAnomaly = dayActivities.some(function(a) { return a.isAnomaly; });
+                const maxScore = dayActivities.length > 0 ? Math.max.apply(Math, dayActivities.map(function(a) { return a.score; })) : 0;
+                return { day: day, maxScore: maxScore, hasAnomaly: hasAnomaly };
+            });
+
+            const ctx = document.getElementById('riskChart');
+            
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(function(d) { return 'Day ' + d.day; }),
+                    datasets: [{
+                        label: 'Max Risk Score',
+                        data: chartData.map(function(d) { return d.maxScore; }),
+                        backgroundColor: chartData.map(function(d) {
+                            return d.hasAnomaly && showAnomalies ? '#ef4444' : '#64748b';
+                        }),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Risk Score',
+                                color: '#94a3b8'
+                            },
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: '#334155' }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Day',
+                                color: '#94a3b8'
+                            },
+                            ticks: { 
+                                color: '#94a3b8',
+                                maxRotation: 45,
+                                minRotation: 45
+                            },
+                            grid: { color: '#334155' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderActivityLog() {
+            var logBody = document.getElementById('activityLogBody');
+            document.getElementById('logCount').textContent = activities.length;
+            
+            var easyDesc = 'Malicious activities are the only outliers';
+            var mediumDesc = 'Malicious activities mixed with some legitimate outliers (large files, backups, etc.)';
+            var hardDesc = 'Realistic environment - many legitimate outliers make detection harder';
+            
+            var descText = easyDesc;
+            if (difficulty === 'medium') {
+                descText = mediumDesc;
+            } else if (difficulty === 'hard') {
+                descText = hardDesc;
+            }
+            document.getElementById('logDesc').textContent = descText;
+
+            if (activities.length === 0) {
+                logBody.innerHTML = '<div style="text-align: center; padding: 3rem; color: #64748b;">No activity yet.</div>';
+                return;
+            }
+
+            var reversedActivities = activities.slice().reverse();
+            var htmlParts = [];
+            
+            for (var i = 0; i < reversedActivities.length; i++) {
+                var activity = reversedActivities[i];
+                var className = 'activity-item';
+                var badge = '';
+                
+                if (activity.isAnomaly && activity.isMalicious && showAnomalies) {
+                    className += ' malicious';
+                    badge = '<span style="color: #fca5a5; font-weight: bold;">🚨 MALICIOUS</span>';
+                } else if (!activity.isMalicious && activity.score > stats.threshold) {
+                    className += ' legitimate-high';
+                    badge = '<span style="color: #fde047; font-size: 0.75rem;">⚠️ High</span>';
+                }
+
+                var deptColor = '#60a5fa';
+                if (activity.dept === 'accounting') {
+                    deptColor = '#6ee7b7';
+                } else if (activity.dept === 'dev') {
+                    deptColor = '#c084fc';
+                }
+
+                var icon = activity.type === 'website' ? '🌐' : '📥';
+                var scoreColor = activity.score > stats.threshold ? '#f87171' : '#64748b';
+
+                var html = '<div class="' + className + '">' +
+                    '<span style="color: #64748b; width: 60px;">Day ' + activity.day + '</span>' +
+                    '<span style="color: ' + deptColor + '; font-weight: 600; width: 100px;">' + activity.dept.toUpperCase() + '</span>' +
+                    '<span style="color: #94a3b8; width: 120px;">' + activity.user + '</span>' +
+                    '<span style="color: #cbd5e1; flex: 1;">' + icon + ' ' + activity.value + '</span>' +
+                    '<span style="color: ' + scoreColor + '; font-weight: bold; width: 80px; text-align: right;">score: ' + activity.score + '</span>' +
+                    badge +
+                    '</div>';
+                    
+                htmlParts.push(html);
+            }
+
+            logBody.innerHTML = htmlParts.join('');
+        }
+    </script>
+</body>
+</html>
