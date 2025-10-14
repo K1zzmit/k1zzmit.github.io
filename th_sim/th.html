@@ -337,9 +337,32 @@
         canvas {
             max-height: 400px;
         }
+
+        .back-button {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #334155;
+            color: #e2e8f0;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: #475569;
+            border-color: #64748b;
+            color: #22d3ee;
+        }
+
     </style>
 </head>
 <body>
+    <button class="back-button" onclick="window.location.href='index.html'">⬅️ Back to Main</button>
     <div class="container">
         <div class="header">
             <h1>🛡️ Statistical Anomaly Detection</h1>
