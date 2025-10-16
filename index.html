@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K1zzmit</title>
+    <title>K1zzmit Projects</title>
     <style>
+        body {
+            background: linear-gradient(120deg, #0a1929 0%, #1e293b 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 8s ease-in-out infinite;
+        }
+        @keyframes gradientMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
         * {
             margin: 0;
             padding: 0;
@@ -97,6 +107,11 @@
         .project-icon {
             font-size: 2rem;
             filter: grayscale(20%);
+            transition: transform 0.3s, filter 0.3s;
+        }
+        .project-card:hover .project-icon {
+            transform: scale(1.2) rotate(-8deg);
+            filter: none;
         }
 
         .project-title {
@@ -174,29 +189,34 @@
 <body>
     <div class="container">
         <header>
-            <h1>Projects</h1>
-            <p class="subtitle">Random Creations</p>
+            <h1>Cybersecurity Playground</h1>
+            <p class="subtitle">Explore interactive tools and visualizations for threat hunting, anomaly detection, and more.</p>
         </header>
 
         <div class="projects-grid">
-            <!-- Example Project 1 -->
+            <!-- Threat Hunting Simulator -->
             <a href="/th_sim/th.html" class="project-card">
                 <div class="project-header">
-                    <div class="project-icon">📊</div>
+                    <div class="project-icon" aria-label="Radar">�️</div>
                     <h2 class="project-title">Threat Hunting Simulator</h2>
                 </div>
-                <p class="project-description">Find anomalies within a dataset!</p>
+                <p class="project-description">Practice finding anomalies in simulated datasets. Sharpen your detection skills in a safe, interactive environment.</p>
                 <div class="project-tags">
+                    <span class="tag">Anomaly Detection</span>
+                    <span class="tag">Simulation</span>
                 </div>
             </a>
 
+            <!-- Threat Hunting Types Visualization -->
             <a href="/th_types/th_types.html" class="project-card">
                 <div class="project-header">
-                    <div class="project-icon">📊</div>
-                    <h2 class="project-title">Threat Hunting Types Visulazation</h2>
+                    <div class="project-icon" aria-label="Graph">�</div>
+                    <h2 class="project-title">Threat Hunting Types Visualization</h2>
                 </div>
-                <p class="project-description">See a visulazation of how Anomaly-Based, Intelligence-Driven & Hypothesis-Driven threat hunting types differ.</p>
+                <p class="project-description">Compare Anomaly-Based, Intelligence-Driven, and Hypothesis-Driven hunting with interactive visualizations. See how each approach uncovers threats.</p>
                 <div class="project-tags">
+                    <span class="tag">Visualization</span>
+                    <span class="tag">Threat Hunting</span>
                 </div>
             </a>
 
