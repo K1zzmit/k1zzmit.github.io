@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Resources - DEATHCon Workshop</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .home-button {
+            display: inline-block;
+            background: #44657d;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid #7d9eb5;
+            margin-bottom: 2rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .home-button:hover {
+            background: #7d9eb5;
+            border-color: #7d9eb5;
+            box-shadow: 0 0 15px rgba(125, 158, 181, 0.5);
+        }
+
+        .home-button::before {
+            content: "← ";
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 50%, #8B0000 100%);
+            padding: 3rem 2rem;
+            margin: 0 -2rem 3rem -2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 3px
+            );
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #7d9eb5;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #44657d;
+        }
+
+        .section-description {
+            color: #cccccc;
+            font-size: 1.05rem;
+            margin-top: 1rem;
+        }
+
+        /* Resource Items */
+        .resource-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .resource-item {
+            background: #0a0a0a;
+            border-left: 4px solid #7d9eb5;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .resource-item:hover {
+            background: #111111;
+            border-left-color: #a0c5de;
+            transform: translateX(4px);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #44657d;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: 2px solid #44657d;
+            white-space: nowrap;
+        }
+
+        .resource-link:hover {
+            background: #7d9eb5;
+            border-color: #7d9eb5;
+            box-shadow: 0 0 10px rgba(125, 158, 181, 0.5);
+        }
+
+        .resource-link::after {
+            content: "→";
+        }
+
+        .resource-description {
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(125, 158, 181, 0.2);
+            color: #7d9eb5;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Note Box */
+        .note-box {
+            background: #1a0000;
+            border: 2px solid #DC143C;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            color: #ffffff;
+        }
+
+        .note-box-title {
+            font-weight: 900;
+            color: #DC143C;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .note-box-title::before {
+            content: "⚡ ";
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .resource-header {
+                flex-direction: column;
+            }
+
+            .resource-link {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="landing.html" class="home-button">Back to Workshop Home</a>
+
+        <div class="header">
+            <div class="header-content">
+                <h1>Additional Resources</h1>
+                <p>Tools, datasets, and references to continue your threat hunting journey</p>
+            </div>
+        </div>
+
+        <!-- Informational Resources Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">📚 Informational Resources</h2>
+                <p class="section-description">Essential knowledge bases and references for threat hunting</p>
+            </div>
+
+            <div class="resource-list">
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">MITRE ATT&CK</h3>
+                        <a href="https://attack.mitre.org/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Globally-accessible knowledge base of adversary tactics and techniques based on real-world observations. Essential for understanding attacker behavior and building detections.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Framework</span>
+                        <span class="tag">TTPs</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">LOLBAS Project</h3>
+                        <a href="https://lolbas-project.github.io/#" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Living Off The Land Binaries, Scripts and Libraries - documentation of Windows binaries that can be abused by attackers for malicious purposes.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Windows</span>
+                        <span class="tag">Binaries</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">LOLDrivers</h3>
+                        <a href="https://lolol.farm/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Comprehensive list of Windows drivers that can be exploited by attackers to gain elevated privileges or bypass security controls.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Windows</span>
+                        <span class="tag">Drivers</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Windows DFIR Handbook</h3>
+                        <a href="https://windows.dfirhandbook.com/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Comprehensive guide to Windows Digital Forensics and Incident Response, covering artifacts, tools, and investigation techniques.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">DFIR</span>
+                        <span class="tag">Windows</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Ultimate Windows Security</h3>
+                        <a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Encyclopedia of Windows Security Event IDs with detailed explanations. Invaluable reference when analyzing Windows Event Logs.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Event Logs</span>
+                        <span class="tag">Windows</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Sysmon</h3>
+                        <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        System Monitor (Sysmon) provides detailed information about process creations, network connections, and file modifications. Critical for enhanced Windows logging.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Logging</span>
+                        <span class="tag">Windows</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detections & Queries Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">🔍 Detections & Queries</h2>
+                <p class="section-description">Pre-built detection rules and query repositories</p>
+            </div>
+
+            <div class="resource-list">
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Splunk Security Content</h3>
+                        <a href="https://research.splunk.com/detections/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Open-source repository of Splunk detection searches covering MITRE ATT&CK techniques. Great starting point for building Splunk detections.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Splunk</span>
+                        <span class="tag">Detection Rules</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Detections.ai</h3>
+                        <a href="https://detections.ai/landing" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        AI-powered platform for creating, testing, and managing detection content across multiple SIEM platforms.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Detection Engineering</span>
+                        <span class="tag">Multi-SIEM</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Detection Stream</h3>
+                        <a href="https://detectionstream.com/framework/sigma" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Interactive viewer and search engine for Sigma detection rules. Makes it easy to find and understand community detection content.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Sigma</span>
+                        <span class="tag">Search Tool</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">SigmaHQ</h3>
+                        <a href="https://github.com/SigmaHQ/sigma" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Official Sigma rule repository on GitHub. Sigma is a generic signature format for SIEM systems, allowing rules to be converted between platforms.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Sigma</span>
+                        <span class="tag">GitHub</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OSINT & Analysis Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">🔬 OSINT & Analysis Tools</h2>
+                <p class="section-description">Tools for investigating files, domains, IPs, and indicators</p>
+            </div>
+
+            <div class="resource-list">
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">VirusTotal</h3>
+                        <a href="https://www.virustotal.com/gui/home/upload" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Analyze suspicious files, URLs, domains, and IP addresses using multiple antivirus engines and threat intelligence sources.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">File Analysis</span>
+                        <span class="tag">Threat Intel</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">IBM X-Force Exchange</h3>
+                        <a href="https://exchange.xforce.ibmcloud.com/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Threat intelligence sharing platform with information about IPs, domains, vulnerabilities, and malware families.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Threat Intel</span>
+                        <span class="tag">IOCs</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Cisco Talos Intelligence</h3>
+                        <a href="https://www.talosintelligence.com/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Leading threat intelligence and research organization. Provides reputation data, vulnerability research, and threat analysis.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Threat Intel</span>
+                        <span class="tag">Research</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">Browserling</h3>
+                        <a href="https://www.browserling.com/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Live interactive cross-browser testing tool. Safely browse suspicious websites in isolated browser environments.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Sandbox</span>
+                        <span class="tag">Web Testing</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">MxToolbox</h3>
+                        <a href="https://mxtoolbox.com/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Comprehensive suite of DNS, email, and network diagnostic tools. Essential for investigating email-based threats and domain infrastructure.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">DNS</span>
+                        <span class="tag">Email</span>
+                    </div>
+                </div>
+
+                <div class="resource-item">
+                    <div class="resource-header">
+                        <h3 class="resource-title">ANY.RUN</h3>
+                        <a href="https://any.run/" class="resource-link" target="_blank">Visit</a>
+                    </div>
+                    <p class="resource-description">
+                        Interactive malware analysis sandbox. Watch malware execute in real-time and investigate its behavior in a safe environment.
+                    </p>
+                    <div class="resource-tags">
+                        <span class="tag">Malware Analysis</span>
+                        <span class="tag">Sandbox</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note Box -->
+        <div class="note-box">
+            <div class="note-box-title">Keep Learning</div>
+            <p>Threat hunting is a continuous learning process. These resources are starting points - explore, experiment, and share your findings with the community!</p>
+        </div>
+    </div>
+</body>
+</html>
