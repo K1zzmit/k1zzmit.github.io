@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Talking Points - Threat Hunting: It's just a fancy CTRL + F</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 50%, #8B0000 100%);
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 3px
+            );
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .header .subtitle {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #000000;
+            color: #DC143C;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #DC143C;
+            font-weight: 900;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .section {
+            background: #0a0a0a;
+            border-left: 6px solid #DC143C;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            background: #111111;
+            border-left-color: #FF1744;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .section-number {
+            background: #DC143C;
+            color: #000000;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .subsection {
+            margin-left: 2rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #222222;
+        }
+
+        .subsection-title {
+            color: #DC143C;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .talking-points {
+            list-style: none;
+            margin-left: 1rem;
+        }
+
+        .talking-points li {
+            padding: 1rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+            color: #cccccc;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 1rem;
+        }
+
+        .talking-points li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #DC143C;
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+
+        .talking-points li:last-child {
+            border-bottom: none;
+        }
+
+        .talking-points strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .note-box {
+            background: #1a0000;
+            border: 2px solid #DC143C;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            color: #ffffff;
+        }
+
+        .note-box::before {
+            content: "⚡ NOTE: ";
+            font-weight: 900;
+            color: #DC143C;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progression {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .progression-item {
+            background: #000000;
+            border: 3px solid #DC143C;
+            padding: 1.5rem 3rem;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: #DC143C;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .progression-item:hover {
+            background: #DC143C;
+            color: #000000;
+        }
+
+        .progression-arrow {
+            color: #DC143C;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            font-weight: 900;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .subsection {
+                margin-left: 1rem;
+            }
+
+            .progression {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .progression-arrow {
+                transform: rotate(90deg);
+            }
+
+            .talking-points li {
+                padding-left: 2rem;
+            }
+        }
+
+        /* Subtle texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>Threat Hunting: It's just a fancy CTRL + F</h1>
+                <p class="subtitle">DEATHCon Workshop Talking Points</p>
+                <div class="badge">BEGINNER LEVEL</div>
+            </div>
+        </div>
+
+        <div class="progression">
+            <div class="progression-item">Crawl</div>
+            <div class="progression-arrow">→</div>
+            <div class="progression-item">Walk</div>
+            <div class="progression-arrow">→</div>
+            <div class="progression-item">Run</div>
+        </div>
+
+        <div class="note-box">
+            This workshop follows a progressive learning approach - start with foundations, build understanding, then apply those concepts. The first part of this workshop is instructional and can be found within the video. The second part is hands-on exercises using Splunk and real datasets to practice threat hunting techniques.
+        </div>
+
+        <!-- Section 1 -->
+        <div class="section">
+            <div class="section-title">
+                <div class="section-number">1</div>
+                <span>What is Threat Hunting?</span>
+            </div>
+            <ul class="talking-points">
+                <li>Define threat hunting in simple terms - proactive vs reactive security</li>
+                <li>Why organizations need threat hunting</li>
+                <li>The difference between SOC monitoring and active hunting</li>
+                <li>Real-world scenarios where threat hunting makes a difference</li>
+            </ul>
+
+            <div class="subsection">
+                <div class="subsection-title">Types of Threat Hunting</div>
+                <ul class="talking-points">
+                    <li><strong>Anomaly-Based Hunting:</strong> Looking for deviations from normal behavior</li>
+                    <li><strong>Intelligence-Driven Hunting:</strong> Using IOCs and threat intel to guide searches</li>
+                    <li><strong>Hypothesis-Driven Hunting:</strong> Testing assumptions about how attackers might operate</li>
+                    <li>When to use each approach (with examples)</li>
+                    <li>Demo: Interactive visualization comparing all three types</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="section">
+            <div class="section-title">
+                <div class="section-number">2</div>
+                <span>What is a Log?</span>
+            </div>
+            <ul class="talking-points">
+                <li>Logs are the breadcrumbs of digital activity</li>
+                <li>Why logs matter for security (visibility is everything)</li>
+                <li>Anatomy of a log entry - timestamps, source, event details</li>
+                <li>Common mistakes: not collecting the right logs or collecting too much noise</li>
+            </ul>
+
+            <div class="subsection">
+                <div class="subsection-title">Types of Logs</div>
+                <ul class="talking-points">
+                    <li><strong>Windows Event Logs:</strong> Security, System, Application logs</li>
+                    <li><strong>Sysmon:</strong> Enhanced process and network logging</li>
+                    <li><strong>Network Logs:</strong> Firewall, proxy, DNS</li>
+                    <li><strong>Application Logs:</strong> Web servers, databases, custom apps</li>
+                    <li><strong>Authentication Logs:</strong> Login attempts, privilege escalation</li>
+                </ul>
+            </div>
+
+            <div class="note-box">
+                Focus on Windows logs since that's your specialty - bring examples they'll actually encounter
+            </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="section">
+            <div class="section-title">
+                <div class="section-number">3</div>
+                <span>What is a SIEM?</span>
+            </div>
+            <ul class="talking-points">
+                <li>SIEM = Security Information and Event Management (don't just say the acronym!)</li>
+                <li>The SIEM's job: collect, normalize, correlate, and alert</li>
+                <li>Why SIEMs are critical for threat hunting at scale</li>
+                <li>SIEM limitations - it's only as good as your queries</li>
+            </ul>
+
+            <div class="subsection">
+                <div class="subsection-title">Types of SIEMs</div>
+                <ul class="talking-points">
+                    <li><strong>Splunk:</strong> Industry standard, powerful search language (SPL)</li>
+                    <li><strong>Elastic Stack (ELK):</strong> Open source, great for large environments</li>
+                    <li><strong>Microsoft Sentinel:</strong> Cloud-native, Azure integration</li>
+                    <li><strong>Chronicle:</strong> Google's SIEM, massive scale</li>
+                    <li><strong>QRadar, LogRhythm, others:</strong> Brief mention of alternatives</li>
+                    <li>Why we're focusing on Splunk for this workshop</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="section">
+            <div class="section-title">
+                <div class="section-number">4</div>
+                <span>Threat Hunting in Splunk</span>
+            </div>
+            <ul class="talking-points">
+                <li>Introduction to Splunk Search Processing Language (SPL)</li>
+                <li>Basic search syntax and operators (index, sourcetype, search, stats)</li>
+                <li>Building effective hunting queries - start simple, refine iteratively</li>
+                <li>Common pitfalls: being too broad (alert fatigue) or too narrow (missing threats)</li>
+            </ul>
+
+            <div class="subsection">
+                <div class="subsection-title">Hands-On Exercises</div>
+                <ul class="talking-points">
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">Key Takeaways</div>
+                <ul class="talking-points">
+                    <li>Start with questions, not queries ("What would an attacker do next?")</li>
+                    <li>Iterate and refine - hunting is investigative, not automated</li>
+                    <li>Document your findings and build repeatable searches</li>
+                    <li>Share knowledge with your team - hunting gets better collectively</li>
+                    <li>Resources for continuing your learning journey</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

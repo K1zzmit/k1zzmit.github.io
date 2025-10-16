@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>whoami - k1zzmit @ DEATHCon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .terminal-header {
+            border: 2px solid #00ff00;
+            border-bottom: none;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff00;
+        }
+
+        .terminal-body {
+            border: 2px solid #00ff00;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .prompt {
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .command {
+            color: #00ffff;
+            margin-bottom: 1.5rem;
+        }
+
+        .output {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #00ffff;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-decoration: underline;
+        }
+
+        .ascii-art {
+            color: #00ff00;
+            font-size: 0.7rem;
+            line-height: 1.2;
+            margin: 2rem 0;
+            text-align: center;
+            white-space: pre;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .info-line {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 1rem;
+        }
+
+        .label {
+            color: #ff00ff;
+        }
+
+        .value {
+            color: #00ff00;
+        }
+
+        a {
+            color: #00ffff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        a:hover {
+            text-shadow: 0 0 10px #00ffff;
+            text-decoration: underline;
+        }
+
+        .typing {
+            border-right: 2px solid #00ff00;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: #00ff00; }
+        }
+
+        .workshop-box {
+            border: 2px solid #ff00ff;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background: rgba(255, 0, 255, 0.05);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+        }
+
+        .workshop-title {
+            color: #ff00ff;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        li:before {
+            content: "→ ";
+            color: #00ffff;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .info-line {
+                grid-template-columns: 1fr;
+                gap: 0.25rem;
+            }
+
+            .ascii-art {
+                font-size: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    
+    <div class="container">
+        <div class="terminal-header">
+            <div class="terminal-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <span>terminal@deathcon:~</span>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="ascii-art">
+██╗  ██╗ ██╗███████╗███████╗███╗   ███╗██╗████████╗
+██║ ██╔╝███║╚══███╔╝╚══███╔╝████╗ ████║██║╚══██╔══╝
+█████╔╝ ╚██║  ███╔╝   ███╔╝ ██╔████╔██║██║   ██║   
+██╔═██╗  ██║ ███╔╝   ███╔╝  ██║╚██╔╝██║██║   ██║   
+██║  ██╗ ██║███████╗███████╗██║ ╚═╝ ██║██║   ██║   
+╚═╝  ╚═╝ ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝╚═╝   ╚═╝   
+            </div>
+
+            <div class="output">
+                <span class="prompt">root@deathcon:~$</span> <span class="command">whoami</span>
+            </div>
+
+            <div class="section">
+                <div class="info-grid">
+                    <div class="info-line">
+                        <span class="label">USERNAME:</span>
+                        <span class="value">k1zzmit</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">ROLE:</span>
+                        <span class="value">Threat Hunter</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">SPECIALIZATION:</span>
+                        <span class="value">Windows Digital Forensics | Threat Hunting | Detection Engineering</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">GITHUB:</span>
+                        <span class="value"><a href="https://github.com/k1zzmit" target="_blank">github.com/k1zzmit</a></span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">WEBSITE:</span>
+                        <span class="value"><a href="https://k1zzmit.github.io" target="_blank">k1zzmit.github.io</a></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workshop-box">
+                <div class="workshop-title">▸ DEATHCon WORKSHOP</div>
+                <div class="value" style="margin-bottom: 0.5rem;">
+                    <span style="color: #666;">(Detection Engineering & Threat Hunting Convention)</span>
+                </div>
+                <div class="value">
+                    <strong>Title:</strong> Threat Hunting - It's just a fancy CTRL + F<br>
+                    <strong>Description:</strong> Demystify threat hunting through hands-on exercises with real logs. Learn how to hunt for evil in the noise using practical techniques, interactive tools, and Splunk queries that actually work.
+                </div>
+                <br>
+                <div class="section-title">What You'll Learn:</div>
+                <ul>
+                    <li>Understanding logs and what actually matters</li>
+                    <li>The three threat hunting types: Anomaly-Based, Intelligence-Driven, and Hypothesis-Driven</li>
+                    <li>Using Splunk to find anomalies in realistic datasets</li>
+                    <li>Hands-on exercises with interactive detection tools</li>
+                    <li>Building hunting queries that don't drown you in false positives</li>
+                    <li>Real-world hunting scenarios and practice datasets</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-title">cat about.txt</div>
+                <div class="value">
+                    From SOC Analyst to Staff Threat Hunter, I've spent years in the trenches hunting adversaries and building detections. I specialize in Windows Digital Forensics and believe threat hunting shouldn't be mystified - it's about asking the right questions and knowing where to look. I built these tools to make hunting concepts tangible and accessible, because the best way to learn is by doing. When I'm not hunting threats, I'm probably building something with Claude to turn security ideas into interactive reality.
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">ls -la skills/</div>
+                <ul>
+                    <li>Windows Digital Forensics & Incident Response</li>
+                    <li>Threat Hunting (Anomaly, Intelligence, Hypothesis-Driven)</li>
+                    <li>Detection Engineering & Rule Development</li>
+                    <li>SIEM/Splunk Query Development</li>
+                    <li>Log Analysis & Event Correlation</li>
+                    <li>Security Data Visualization</li>
+                    <li>Python/JavaScript for Security Automation</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <div class="section-title">cat projects.log</div>
+                <div class="value">
+                    → Anomaly Detection Simulator - Practice finding needles in haystacks<br>
+                    → Threat Hunting Methodology Visualizer - Compare hunting approaches<br>
+                </div>
+            </div>
+
+            <div class="output">
+                <span class="prompt">root@deathcon:~$</span> <span class="typing"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Flicker effect on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            let flickers = 0;
+            const flickerInterval = setInterval(() => {
+                body.style.opacity = body.style.opacity === '0.8' ? '1' : '0.8';
+                flickers++;
+                if (flickers > 6) {
+                    clearInterval(flickerInterval);
+                    body.style.opacity = '1';
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
