@@ -77,10 +77,10 @@
 
         .badge {
             display: inline-block;
-            background: #000000;
-            color: #DC143C;
+            background: #44657d;
+            color: #ffffff;
             padding: 0.75rem 1.5rem;
-            border: 2px solid #DC143C;
+            border: 2px solid #7d9eb5;
             font-weight: 900;
             margin-top: 1.5rem;
             font-size: 1rem;
@@ -89,7 +89,7 @@
 
         .section {
             background: #0a0a0a;
-            border-left: 6px solid #DC143C;
+            border-left: 6px solid #7d9eb5;
             padding: 2.5rem;
             margin-bottom: 2rem;
             transition: all 0.3s ease;
@@ -97,7 +97,7 @@
 
         .section:hover {
             background: #111111;
-            border-left-color: #FF1744;
+            border-left-color: #a0c5de;
         }
 
         .section-title {
@@ -113,8 +113,8 @@
         }
 
         .section-number {
-            background: #DC143C;
-            color: #000000;
+            background: #44657d;
+            color: #ffffff;
             width: 50px;
             height: 50px;
             display: flex;
@@ -129,11 +129,11 @@
             margin-left: 2rem;
             margin-top: 2rem;
             padding-top: 1.5rem;
-            border-top: 1px solid #222222;
+            border-top: 1px solid #44657d;
         }
 
         .subsection-title {
-            color: #DC143C;
+            color: #7d9eb5;
             font-size: 1.4rem;
             margin-bottom: 1rem;
             font-weight: 700;
@@ -159,7 +159,7 @@
             content: "▸";
             position: absolute;
             left: 0;
-            color: #DC143C;
+            color: #7d9eb5;
             font-weight: bold;
             font-size: 1.4rem;
         }
@@ -199,23 +199,24 @@
 
         .progression-item {
             background: #000000;
-            border: 3px solid #DC143C;
+            border: 3px solid #44657d;
             padding: 1.5rem 3rem;
             font-weight: 900;
             font-size: 1.5rem;
-            color: #DC143C;
+            color: #7d9eb5;
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.3s ease;
         }
 
         .progression-item:hover {
-            background: #DC143C;
-            color: #000000;
+            background: #44657d;
+            color: #ffffff;
+            border-color: #7d9eb5;
         }
 
         .progression-arrow {
-            color: #DC143C;
+            color: #7d9eb5;
             font-size: 2.5rem;
             display: flex;
             align-items: center;
@@ -269,10 +270,38 @@
             position: relative;
             z-index: 1;
         }
+
+        .home-button {
+            display: inline-block;
+            background: #44657d;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid #7d9eb5;
+            margin-bottom: 2rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .home-button:hover {
+            background: #7d9eb5;
+            border-color: #7d9eb5;
+            box-shadow: 0 0 15px rgba(125, 158, 181, 0.5);
+            text-shadow: none;
+        }
+
+        .home-button::before {
+            content: "← ";
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="landing.html" class="home-button">Back to Workshop Home</a>
         <div class="header">
             <div class="header-content">
                 <h1>Threat Hunting: It's just a fancy CTRL + F</h1>
@@ -290,7 +319,7 @@
         </div>
 
         <div class="note-box">
-            This workshop follows a progressive learning approach - start with foundations, build understanding, then apply those concepts. The first part of this workshop is instructional and can be found within the video. The second part is hands-on exercises using Splunk and real datasets to practice threat hunting techniques.
+            This workshop follows a progressive learning approach - start with foundations, build understanding, then apply advanced concepts. As such, the first half of this workshop is instructional and it is recommended to watch the video before conducting the hands on exercises.
         </div>
 
         <!-- Section 1 -->
@@ -339,11 +368,8 @@
                     <li><strong>Network Logs:</strong> Firewall, proxy, DNS</li>
                     <li><strong>Application Logs:</strong> Web servers, databases, custom apps</li>
                     <li><strong>Authentication Logs:</strong> Login attempts, privilege escalation</li>
+                    <li>Which logs are most valuable for threat hunting</li>
                 </ul>
-            </div>
-
-            <div class="note-box">
-                Focus on Windows logs since that's your specialty - bring examples they'll actually encounter
             </div>
         </div>
 
@@ -389,6 +415,12 @@
             <div class="subsection">
                 <div class="subsection-title">Hands-On Exercises</div>
                 <ul class="talking-points">
+                    <li>Exercise 1: Understanding your data</li>
+                    <li>Exercise 2: Hunting for suspicious process execution</li>
+                    <li>Exercise 3: Identifying command-and-control traffic patterns</li>
+                    <li>Exercise 4: Identifying DCSync</li>
+                    <li>Exercise 5: Identifying AS-REP Roasting</li>
+                    <li>Using the interactive tools on k1zzmit.github.io</li>
                 </ul>
             </div>
 

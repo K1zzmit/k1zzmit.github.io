@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEATHCon Workshop - Threat Hunting: It's just a fancy CTRL + F</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 50%, #8B0000 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 3px
+            );
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .conference {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #44657d;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #7d9eb5;
+            font-weight: 900;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        /* Main Content */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #7d9eb5;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #cccccc;
+            font-size: 1.1rem;
+        }
+
+        /* Resource Cards */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .resource-card {
+            background: #0a0a0a;
+            border: 3px solid #44657d;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #DC143C 0%, #7d9eb5 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .resource-card:hover {
+            background: #111111;
+            border-color: #7d9eb5;
+            transform: translateY(-4px);
+        }
+
+        .resource-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .resource-card.featured {
+            border-color: #DC143C;
+            border-width: 4px;
+        }
+
+        .resource-card.featured .card-icon {
+            color: #DC143C;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: #7d9eb5;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .card-description {
+            color: #cccccc;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .card-link {
+            display: inline-block;
+            background: #44657d;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid #44657d;
+        }
+
+        .card-link:hover {
+            background: #7d9eb5;
+            border-color: #7d9eb5;
+            box-shadow: 0 0 15px rgba(125, 158, 181, 0.5);
+        }
+
+        .resource-card.featured .card-link {
+            background: #DC143C;
+            border-color: #DC143C;
+        }
+
+        .resource-card.featured .card-link:hover {
+            background: #ff1744;
+            border-color: #ff1744;
+        }
+
+        .card-status {
+            display: inline-block;
+            background: rgba(125, 158, 181, 0.2);
+            color: #7d9eb5;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+
+        .card-status.coming-soon {
+            background: rgba(68, 101, 125, 0.3);
+            color: #44657d;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: #0a0a0a;
+            border: 3px solid #7d9eb5;
+            padding: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .video-section h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #7d9eb5;
+            margin-bottom: 1.5rem;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000;
+            border: 2px solid #44657d;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #7d9eb5;
+        }
+
+        .video-placeholder-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 2px solid #44657d;
+            color: #cccccc;
+        }
+
+        .footer a {
+            color: #7d9eb5;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #a0c5de;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Threat Hunting: It's just a fancy CTRL + F</h1>
+                <p class="subtitle">DEATHCon Workshop by k1zzmit</p>
+                <p class="conference">Detection Engineering & Threat Hunting Convention</p>
+                <div class="badge">BEGINNER LEVEL</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- About Section -->
+            <div class="section-header">
+                <h2>Workshop Resources</h2>
+                <p>Everything you need for hands-on threat hunting practice</p>
+            </div>
+
+            <!-- Resource Grid -->
+            <div class="resource-grid">
+                <!-- Workshop Recording Card -->
+                <div class="resource-card featured">
+                    <div class="card-icon">🎥</div>
+                    <h3 class="card-title">Workshop Recording</h3>
+                    <p class="card-description">
+                        Watch the full workshop video covering threat hunting fundamentals, logs, SIEMs, and hands-on Splunk demonstrations.
+                    </p>
+                    <a href="#" class="card-link" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <span class="card-status coming-soon">Coming Soon</span>
+                </div>
+
+                <!-- Discord Card -->
+                <div class="resource-card featured">
+                    <div class="card-icon">💬</div>
+                    <h3 class="card-title">Discord Community</h3>
+                    <p class="card-description">
+                        Join the discussion! Ask questions, share findings, and connect with other threat hunters in the workshop channel.
+                    </p>
+                    <a href="https://discordapp.com/channels/1249481364277825557/1427530380503941192" class="card-link" target="_blank">Join Discord</a>
+                </div>
+
+                <!-- Whoami Card -->
+                <div class="resource-card">
+                    <div class="card-icon">👤</div>
+                    <h3 class="card-title">About the Instructor</h3>
+                    <p class="card-description">
+                        Learn about k1zzmit - Threat Hunter specializing in Windows Digital Forensics and Detection Engineering.
+                    </p>
+                    <a href="whoami.html" class="card-link">View Profile</a>
+                </div>
+
+                <!-- Workshop Overview Card -->
+                <div class="resource-card featured">
+                    <div class="card-icon">📋</div>
+                    <h3 class="card-title">Workshop Overview</h3>
+                    <p class="card-description">
+                        Detailed talking points and structure for the workshop. Covers threat hunting types, logs, SIEMs, and hands-on Splunk exercises.
+                    </p>
+                    <a href="workshop-overview.html" class="card-link">View Overview</a>
+                </div>
+
+                <!-- Workshop Instructions Card -->
+                <div class="resource-card">
+                    <div class="card-icon">📖</div>
+                    <h3 class="card-title">Workshop Instructions</h3>
+                    <p class="card-description">
+                        Step-by-step guide for completing the hands-on exercises and working with the datasets.
+                    </p>
+                    <a href="#" class="card-link" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <span class="card-status coming-soon">Coming Soon</span>
+                </div>
+
+                <!-- Interactive Tools Card -->
+                <div class="resource-card featured">
+                    <div class="card-icon">🛠️</div>
+                    <h3 class="card-title">Interactive Tools</h3>
+                    <p class="card-description">
+                        Practice with interactive threat hunting visualizations and anomaly detection simulators.
+                    </p>
+                    <a href="https://k1zzmit.github.io" class="card-link" target="_blank">Launch Tools</a>
+                </div>
+
+                <!-- Additional Resources Card -->
+                <div class="resource-card">
+                    <div class="card-icon">🔗</div>
+                    <h3 class="card-title">Additional Resources</h3>
+                    <p class="card-description">
+                        Links to tools, datasets, cheat sheets, and further reading to continue your threat hunting journey.
+                    </p>
+                    <a href="#" class="card-link" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <span class="card-status coming-soon">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Workshop by <a href="https://github.com/k1zzmit" target="_blank">k1zzmit</a></p>
+            <p style="margin-top: 0.5rem;">Part of <a href="https://deathcon.io" target="_blank">DEATHCon 2025</a></p>
+        </div>
+    </div>
+</body>
+</html>

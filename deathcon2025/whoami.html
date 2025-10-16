@@ -12,12 +12,24 @@
         }
 
         body {
-            background: #0a0a0a;
-            color: #00ff00;
+            background: #000000;
+            color: #ffffff;
             font-family: 'Courier New', monospace;
             min-height: 100vh;
             padding: 2rem;
             overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
         }
 
         .scanlines {
@@ -43,10 +55,10 @@
         }
 
         .terminal-header {
-            border: 2px solid #00ff00;
+            border: 2px solid #7d9eb5;
             border-bottom: none;
             padding: 0.5rem 1rem;
-            background: rgba(0, 255, 0, 0.05);
+            background: rgba(125, 158, 181, 0.05);
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -61,23 +73,23 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #00ff00;
+            background: #7d9eb5;
         }
 
         .terminal-body {
-            border: 2px solid #00ff00;
+            border: 2px solid #7d9eb5;
             padding: 2rem;
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            background: #0a0a0a;
+            box-shadow: 0 0 20px rgba(125, 158, 181, 0.3);
         }
 
         .prompt {
-            color: #00ff00;
-            text-shadow: 0 0 5px #00ff00;
+            color: #DC143C;
+            text-shadow: 0 0 5px rgba(220, 20, 60, 0.5);
         }
 
         .command {
-            color: #00ffff;
+            color: #ffffff;
             margin-bottom: 1.5rem;
         }
 
@@ -91,20 +103,23 @@
         }
 
         .section-title {
-            color: #00ffff;
+            color: #7d9eb5;
             font-size: 1.2rem;
             margin-bottom: 1rem;
             text-decoration: underline;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .ascii-art {
-            color: #00ff00;
+            color: #DC143C;
             font-size: 0.7rem;
             line-height: 1.2;
             margin: 2rem 0;
             text-align: center;
             white-space: pre;
-            text-shadow: 0 0 10px #00ff00;
+            text-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
         }
 
         .info-grid {
@@ -119,47 +134,52 @@
         }
 
         .label {
-            color: #ff00ff;
+            color: #44657d;
+            font-weight: 700;
         }
 
         .value {
-            color: #00ff00;
+            color: #cccccc;
         }
 
         a {
-            color: #00ffff;
+            color: #7d9eb5;
             text-decoration: none;
             transition: all 0.3s;
         }
 
         a:hover {
-            text-shadow: 0 0 10px #00ffff;
+            text-shadow: 0 0 10px rgba(125, 158, 181, 0.8);
             text-decoration: underline;
+            color: #a0c5de;
         }
 
         .typing {
-            border-right: 2px solid #00ff00;
+            border-right: 2px solid #DC143C;
             animation: blink 0.7s infinite;
         }
 
         @keyframes blink {
             0%, 50% { border-color: transparent; }
-            51%, 100% { border-color: #00ff00; }
+            51%, 100% { border-color: #DC143C; }
         }
 
         .workshop-box {
-            border: 2px solid #ff00ff;
+            border: 3px solid #DC143C;
             padding: 1.5rem;
             margin: 2rem 0;
-            background: rgba(255, 0, 255, 0.05);
-            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+            background: #1a0000;
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.2);
         }
 
         .workshop-title {
-            color: #ff00ff;
+            color: #DC143C;
             font-size: 1.3rem;
             margin-bottom: 1rem;
-            text-shadow: 0 0 5px #ff00ff;
+            text-shadow: 0 0 5px rgba(220, 20, 60, 0.5);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         ul {
@@ -168,12 +188,14 @@
         }
 
         li:before {
-            content: "→ ";
-            color: #00ffff;
+            content: "▸ ";
+            color: #7d9eb5;
+            font-weight: bold;
         }
 
         li {
             margin: 0.5rem 0;
+            color: #cccccc;
         }
 
         @media (max-width: 768px) {
@@ -190,12 +212,39 @@
                 font-size: 0.5rem;
             }
         }
+
+        .home-button {
+            display: inline-block;
+            background: #44657d;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid #7d9eb5;
+            margin-bottom: 2rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .home-button:hover {
+            background: #7d9eb5;
+            border-color: #7d9eb5;
+            box-shadow: 0 0 15px rgba(125, 158, 181, 0.5);
+            text-shadow: none;
+        }
+
+        .home-button::before {
+            content: "← ";
+        }
     </style>
 </head>
 <body>
     <div class="scanlines"></div>
     
     <div class="container">
+        <a href="landing.html" class="home-button">Back to Workshop Home</a>
         <div class="terminal-header">
             <div class="terminal-dots">
                 <div class="dot"></div>
@@ -246,10 +295,10 @@
 
             <div class="workshop-box">
                 <div class="workshop-title">▸ DEATHCon WORKSHOP</div>
-                <div class="value" style="margin-bottom: 0.5rem;">
-                    <span style="color: #666;">(Detection Engineering & Threat Hunting Convention)</span>
+                <div class="value" style="margin-bottom: 0.5rem; color: #666;">
+                    (Detection Engineering & Threat Hunting Convention)
                 </div>
-                <div class="value">
+                <div class="value" style="color: #ffffff;">
                     <strong>Title:</strong> Threat Hunting - It's just a fancy CTRL + F<br>
                     <strong>Description:</strong> Demystify threat hunting through hands-on exercises with real logs. Learn how to hunt for evil in the noise using practical techniques, interactive tools, and Splunk queries that actually work.
                 </div>
@@ -276,18 +325,17 @@
                 <div class="section-title">ls -la skills/</div>
                 <ul>
                     <li>Windows Digital Forensics & Incident Response</li>
-                    <li>Threat Hunting (Anomaly, Intelligence, Hypothesis-Driven)</li>
+                    <li>Threat Hunting (Anomaly & Hypothesis-Driven)</li>
                     <li>Detection Engineering & Rule Development</li>
                     <li>SIEM/Splunk Query Development</li>
                     <li>Log Analysis & Event Correlation</li>
                     <li>Security Data Visualization</li>
-                    <li>Python/JavaScript for Security Automation</li>
                 </ul>
             </div>
 
             <div class="section">
                 <div class="section-title">cat projects.log</div>
-                <div class="value">
+                <div class="value" style="color: #ffffff;">
                     → Anomaly Detection Simulator - Practice finding needles in haystacks<br>
                     → Threat Hunting Methodology Visualizer - Compare hunting approaches<br>
                 </div>
