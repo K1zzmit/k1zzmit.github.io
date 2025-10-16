@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Hunting Approaches</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: linear-gradient(to bottom right, #1e293b, #0f172a);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header h2 {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+        }
+
+        .mode-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .mode-btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #334155;
+            color: #cbd5e1;
+        }
+
+        .mode-btn:hover {
+            background: #475569;
+        }
+
+        .mode-btn.active-anomaly {
+            background: #7c3aed;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .mode-btn.active-intelligence {
+            background: #2563eb;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .mode-btn.active-hypothesis {
+            background: #059669;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.4);
+        }
+
+        .canvas-container {
+            background: #020617;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 32px;
+            min-height: 400px;
+            position: relative;
+            border: 1px solid #334155;
+        }
+
+        .canvas-label {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .alert-box {
+            position: absolute;
+            background: #1e293b;
+            border: 2px solid #eab308;
+            padding: 16px;
+            border-radius: 8px;
+            max-width: 300px;
+            right: 16px;
+            top: 16px;
+        }
+
+        .info-box {
+            position: absolute;
+            background: #1e293b;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .info-box.blue {
+            border: 2px solid #3b82f6;
+            left: 16px;
+            top: 60px;
+        }
+
+        .info-box.emerald {
+            border: 2px solid #10b981;
+            left: 16px;
+            top: 60px;
+            max-width: 450px;
+        }
+
+        .match-box {
+            position: absolute;
+            background: #7f1d1d;
+            border: 2px solid #ef4444;
+            padding: 20px;
+            border-radius: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 60px;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+        }
+
+        .hypothesis-box {
+            position: absolute;
+            background: #064e3b;
+            border: 2px solid #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 60px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            max-width: 450px;
+        }
+
+        .progress-container {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .step-item {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            background: #0f172a;
+            color: #64748b;
+        }
+
+        .step-item.completed {
+            background: #334155;
+            color: #cbd5e1;
+        }
+
+        .step-item.active-anomaly {
+            background: #581c87;
+            border: 2px solid #7c3aed;
+            color: white;
+        }
+
+        .step-item.active-intelligence {
+            background: #1e3a8a;
+            border: 2px solid #3b82f6;
+            color: white;
+        }
+
+        .step-item.active-hypothesis {
+            background: #064e3b;
+            border: 2px solid #10b981;
+            color: white;
+        }
+
+        .step-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            background: #475569;
+        }
+
+        .step-number.completed {
+            background: #16a34a;
+        }
+
+        .step-number.active {
+            background: #eab308;
+        }
+
+        .controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .control-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .play-btn:hover:not(:disabled) {
+            background: #15803d;
+        }
+
+        .play-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #475569;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: #64748b;
+        }
+
+        .key-differences {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .diff-card {
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .diff-card.anomaly {
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid #7c3aed;
+        }
+
+        .diff-card.intelligence {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid #3b82f6;
+        }
+
+        .diff-card.hypothesis {
+            background: rgba(5, 150, 105, 0.1);
+            border: 1px solid #10b981;
+        }
+
+        .diff-card h3 {
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .diff-card.anomaly h3 { color: #a78bfa; }
+        .diff-card.intelligence h3 { color: #60a5fa; }
+        .diff-card.hypothesis h3 { color: #34d399; }
+
+        .diff-card ul {
+            list-style: none;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .diff-card li {
+            margin-bottom: 6px;
+        }
+
+        .progress-bar {
+            width: 160px;
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            transition: width 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .ping {
+            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>🔍 Threat Hunting Approaches</h2>
+            <p>Interactive comparison of three hunting methodologies</p>
+        </div>
+
+        <div class="mode-buttons">
+            <button class="mode-btn active-anomaly" onclick="setMode('anomaly')">
+                ⚠️ Anomaly-Based
+            </button>
+            <button class="mode-btn" onclick="setMode('intelligence')">
+                🎯 Intelligence-Driven
+            </button>
+            <button class="mode-btn" onclick="setMode('hypothesis')">
+                💡 Hypothesis-Driven
+            </button>
+        </div>
+
+        <div class="canvas-container" id="canvas">
+            <div class="canvas-label">Network Activity</div>
+            <svg width="100%" height="400" id="svg-canvas"></svg>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-header">
+                <span>Progress:</span>
+                <span style="color: #94a3b8; font-weight: normal; font-size: 14px;">
+                    Step <span id="current-step">1</span> of <span id="total-steps">5</span>
+                </span>
+            </div>
+            <div id="steps-container"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn play-btn" id="play-btn" onclick="togglePlay()">
+                ▶️ Play
+            </button>
+            <button class="control-btn reset-btn" onclick="reset()">
+                🔄 Reset
+            </button>
+        </div>
+
+        <div class="key-differences">
+            <div class="diff-card anomaly">
+                <h3>Anomaly-Based</h3>
+                <ul>
+                    <li>• Detects unknown threats</li>
+                    <li>• Requires baseline knowledge</li>
+                    <li>• Higher false positive rate</li>
+                    <li>• Proactive approach</li>
+                </ul>
+            </div>
+            <div class="diff-card intelligence">
+                <h3>Intelligence-Driven</h3>
+                <ul>
+                    <li>• Hunts known threats (IOCs)</li>
+                    <li>• Fast and targeted</li>
+                    <li>• Lower false positives</li>
+                    <li>• Reactive to intel feeds</li>
+                </ul>
+            </div>
+            <div class="diff-card hypothesis">
+                <h3>Hypothesis-Driven</h3>
+                <ul>
+                    <li>• Based on threat knowledge</li>
+                    <li>• Systematic investigation</li>
+                    <li>• Requires hunter expertise</li>
+                    <li>• Iterative and adaptive</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mode = 'anomaly';
+        let step = 0;
+        let isPlaying = false;
+        let timer = null;
+        let scanProgress = 0;
+
+        const modes = {
+            anomaly: {
+                steps: [
+                    "Establishing baseline of normal behavior",
+                    "Monitoring network traffic patterns",
+                    "Detecting deviation from baseline",
+                    "Investigating anomaly",
+                    "Identifying potential threat"
+                ]
+            },
+            intelligence: {
+                steps: [
+                    "Receiving threat intelligence (IOCs)",
+                    "Searching for known indicators",
+                    "Matching IOCs against logs",
+                    "Confirming threat presence",
+                    "Taking remediation action"
+                ]
+            },
+            hypothesis: {
+                steps: [
+                    "Forming hypothesis about attack vector",
+                    "Identifying data sources to test hypothesis",
+                    "Analyzing relevant logs and artifacts",
+                    "Validating or refuting hypothesis",
+                    "Documenting findings and pivoting"
+                ]
+            }
+        };
+
+        function setMode(newMode) {
+            if (newMode !== mode) {
+                mode = newMode;
+                reset();
+                updateModeButtons();
+            }
+        }
+
+        function updateModeButtons() {
+            const buttons = document.querySelectorAll('.mode-btn');
+            buttons.forEach(btn => {
+                btn.className = 'mode-btn';
+            });
+            
+            if (mode === 'anomaly') buttons[0].classList.add('active-anomaly');
+            if (mode === 'intelligence') buttons[1].classList.add('active-intelligence');
+            if (mode === 'hypothesis') buttons[2].classList.add('active-hypothesis');
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const btn = document.getElementById('play-btn');
+            
+            if (isPlaying) {
+                btn.textContent = '⏸️ Pause';
+                playAnimation();
+            } else {
+                btn.textContent = '▶️ Play';
+                if (timer) clearTimeout(timer);
+            }
+        }
+
+        function playAnimation() {
+            const steps = modes[mode].steps;
+            
+            if (step < steps.length - 1) {
+                timer = setTimeout(() => {
+                    step++;
+                    scanProgress = Math.min(100, scanProgress + 25);
+                    updateDisplay();
+                    
+                    if (isPlaying) {
+                        playAnimation();
+                    }
+                }, 2000);
+            } else {
+                isPlaying = false;
+                document.getElementById('play-btn').textContent = '▶️ Play';
+            }
+        }
+
+        function reset() {
+            isPlaying = false;
+            step = 0;
+            scanProgress = 0;
+            if (timer) clearTimeout(timer);
+            document.getElementById('play-btn').textContent = '▶️ Play';
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const steps = modes[mode].steps;
+            document.getElementById('current-step').textContent = step + 1;
+            document.getElementById('total-steps').textContent = steps.length;
+            
+            updateSteps();
+            updateCanvas();
+        }
+
+        function updateSteps() {
+            const steps = modes[mode].steps;
+            const container = document.getElementById('steps-container');
+            container.innerHTML = '';
+            
+            steps.forEach((stepText, idx) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step-item';
+                
+                if (idx < step) stepDiv.classList.add('completed');
+                if (idx === step) {
+                    if (mode === 'anomaly') stepDiv.classList.add('active-anomaly');
+                    if (mode === 'intelligence') stepDiv.classList.add('active-intelligence');
+                    if (mode === 'hypothesis') stepDiv.classList.add('active-hypothesis');
+                }
+                
+                stepDiv.innerHTML = `
+                    <div class="step-content">
+                        <div class="step-number ${idx < step ? 'completed' : idx === step ? 'active' : ''}">
+                            ${idx < step ? '✓' : idx + 1}
+                        </div>
+                        <span>${stepText}</span>
+                    </div>
+                `;
+                
+                container.appendChild(stepDiv);
+            });
+        }
+
+        function updateCanvas() {
+            const canvas = document.getElementById('canvas');
+            const svg = document.getElementById('svg-canvas');
+            svg.innerHTML = '';
+            
+            // Remove all alert boxes
+            canvas.querySelectorAll('.alert-box, .info-box, .match-box, .hypothesis-box').forEach(el => el.remove());
+            
+            if (mode === 'anomaly') {
+                renderAnomalyView(svg, canvas);
+            } else if (mode === 'intelligence') {
+                renderIntelligenceView(canvas);
+            } else {
+                renderHypothesisView(canvas);
+            }
+        }
+
+        function renderAnomalyView(svg, canvas) {
+            canvas.querySelector('.canvas-label').textContent = 'Network Activity';
+            
+            // Baseline
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', '0');
+            line.setAttribute('y1', '50%');
+            line.setAttribute('x2', '100%');
+            line.setAttribute('y2', '50%');
+            line.setAttribute('stroke', '#334155');
+            line.setAttribute('stroke-width', '2');
+            line.setAttribute('stroke-dasharray', '5,5');
+            svg.appendChild(line);
+            
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', '10');
+            text.setAttribute('y', '48%');
+            text.setAttribute('fill', '#64748b');
+            text.setAttribute('font-size', '12');
+            text.textContent = 'Baseline';
+            svg.appendChild(text);
+            
+            // Normal traffic
+            if (step >= 1) {
+                for (let i = 0; i < 30; i++) {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', `${(i % 10) * 10 + 5}%`);
+                    circle.setAttribute('cy', `${Math.random() * 8 + 48}%`);
+                    circle.setAttribute('r', '4');
+                    circle.setAttribute('fill', '#10b981');
+                    circle.setAttribute('opacity', '0.6');
+                    circle.classList.add('pulse');
+                    svg.appendChild(circle);
+                }
+            }
+            
+            // Anomaly
+            if (step >= 2) {
+                const anomaly = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                anomaly.setAttribute('cx', '65%');
+                anomaly.setAttribute('cy', '15%');
+                anomaly.setAttribute('r', '8');
+                anomaly.setAttribute('fill', '#ef4444');
+                anomaly.classList.add('ping');
+                svg.appendChild(anomaly);
+                
+                const anomalyStatic = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                anomalyStatic.setAttribute('cx', '65%');
+                anomalyStatic.setAttribute('cy', '15%');
+                anomalyStatic.setAttribute('r', '8');
+                anomalyStatic.setAttribute('fill', '#ef4444');
+                svg.appendChild(anomalyStatic);
+                
+                if (step >= 3) {
+                    const highlight = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    highlight.setAttribute('cx', '65%');
+                    highlight.setAttribute('cy', '15%');
+                    highlight.setAttribute('r', '20');
+                    highlight.setAttribute('fill', 'none');
+                    highlight.setAttribute('stroke', '#fbbf24');
+                    highlight.setAttribute('stroke-width', '2');
+                    svg.appendChild(highlight);
+                    
+                    const alertBox = document.createElement('div');
+                    alertBox.className = 'alert-box';
+                    alertBox.innerHTML = `
+                        <div style="color: #eab308; font-weight: 600; font-size: 14px; margin-bottom: 4px;">⚠ Anomaly Detected</div>
+                        <div style="color: #cbd5e1; font-size: 12px;">Unusual spike in outbound traffic</div>
+                        <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">300% above baseline</div>
+                    `;
+                    canvas.appendChild(alertBox);
+                }
+            }
+        }
+
+        function renderIntelligenceView(canvas) {
+            canvas.querySelector('.canvas-label').textContent = 'Intelligence Search';
+            
+            if (step >= 0) {
+                const iocBox = document.createElement('div');
+                iocBox.className = 'info-box blue';
+                iocBox.innerHTML = `
+                    <div style="color: #60a5fa; font-weight: 600; font-size: 14px; margin-bottom: 8px;">Threat Intel IOCs:</div>
+                    <div style="font-family: monospace; font-size: 12px; color: ${step >= 1 ? '#fde047' : '#cbd5e1'};">
+                        <div>IP: 192.168.1.100</div>
+                        <div>Hash: a3f5e9...</div>
+                        <div>Domain: malicious.com</div>
+                    </div>
+                `;
+                canvas.appendChild(iocBox);
+            }
+            
+            if (step >= 1) {
+                const scanBox = document.createElement('div');
+                scanBox.className = 'info-box';
+                scanBox.style.right = '16px';
+                scanBox.style.top = '60px';
+                scanBox.innerHTML = `
+                    <div style="font-size: 48px; color: #3b82f6; opacity: 0.5; margin-bottom: 8px;">🗄️</div>
+                    <div style="background: #1e293b; border-radius: 6px; padding: 8px;">
+                        <div style="color: #94a3b8; font-size: 12px; margin-bottom: 4px;">Scanning logs...</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${scanProgress}%"></div>
+                        </div>
+                    </div>
+                `;
+                canvas.appendChild(scanBox);
+            }
+            
+            if (step >= 3) {
+                const matchBox = document.createElement('div');
+                matchBox.className = 'match-box';
+                matchBox.innerHTML = `
+                    <div style="color: #f87171; font-weight: bold; font-size: 18px; margin-bottom: 8px;">✓ Match Found!</div>
+                    <div style="color: #cbd5e1; font-size: 14px;">Confirmed threat in network logs</div>
+                    <div style="color: #fca5a5; font-size: 12px; font-family: monospace; margin-top: 8px;">IP: 192.168.1.100 (3 occurrences)</div>
+                `;
+                canvas.appendChild(matchBox);
+            }
+        }
+
+        function renderHypothesisView(canvas) {
+            canvas.querySelector('.canvas-label').textContent = 'Hypothesis Testing';
+            
+            if (step >= 0) {
+                const hypothesisBox = document.createElement('div');
+                hypothesisBox.className = 'info-box emerald';
+                hypothesisBox.innerHTML = `
+                    <div style="color: #34d399; font-weight: 600; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        💡 Hypothesis:
+                    </div>
+                    <div style="color: #cbd5e1; font-size: 14px; font-style: italic;">
+                        "Attackers may be using PowerShell to establish persistence via scheduled tasks"
+                    </div>
+                `;
+                canvas.appendChild(hypothesisBox);
+            }
+            
+            if (step >= 1) {
+                const dataBox = document.createElement('div');
+                dataBox.className = 'info-box';
+                dataBox.style.right = '16px';
+                dataBox.style.top = '60px';
+                dataBox.style.border = '2px solid #059669';
+                dataBox.innerHTML = `
+                    <div style="color: #34d399; font-weight: 600; font-size: 12px; margin-bottom: 8px;">Target Data Sources:</div>
+                    <div style="font-size: 12px; color: ${step >= 2 ? '#fde047' : '#cbd5e1'};">
+                        <div>• PowerShell logs (4104)</div>
+                        <div>• Scheduled task events</div>
+                        <div>• Process creation logs</div>
+                    </div>
+                `;
+                canvas.appendChild(dataBox);
+            }
+            
+            if (step >= 2) {
+                const analyzeBox = document.createElement('div');
+                analyzeBox.className = 'info-box';
+                analyzeBox.style.left = '50%';
+                analyzeBox.style.transform = 'translateX(-50%)';
+                analyzeBox.style.top = '180px';
+                analyzeBox.style.border = '1px solid #334155';
+                analyzeBox.innerHTML = `
+                    <div style="color: #cbd5e1; font-size: 14px; margin-bottom: 8px;">Analyzing correlation...</div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="background: #10b981; width: ${scanProgress}%"></div>
+                        </div>
+                        <span style="font-size: 12px; color: #94a3b8;">${scanProgress}%</span>
+                    </div>
+                `;
+                canvas.appendChild(analyzeBox);
+            }
+            
+            if (step >= 3) {
+                const resultBox = document.createElement('div');
+                resultBox.className = 'hypothesis-box';
+                resultBox.innerHTML = `
+                    <div style="color: #34d399; font-weight: bold; font-size: 16px; margin-bottom: 8px;">
+                        ${step === 3 ? '🔍 Hypothesis Validated!' : '📋 Findings Documented'}
+                    </div>
+                    <div style="color: #cbd5e1; font-size: 14px;">
+                        Found 7 instances of PowerShell spawning schtasks.exe
+                    </div>
+                    <div style="color: #94a3b8; font-size: 12px; margin-top: 8px;">
+                        Creating new scheduled tasks with suspicious names
+                    </div>
+                `;
+                canvas.appendChild(resultBox);
+            }
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>
