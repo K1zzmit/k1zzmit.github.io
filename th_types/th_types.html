@@ -360,9 +360,32 @@
         .ping {
             animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
+
+        .back-button {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #334155;
+            color: #e2e8f0;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: #475569;
+            border-color: #64748b;
+            color: #22d3ee;
+        }
     </style>
 </head>
 <body>
+    <a class="back-button" href="/index.html">⬅️ Back to Main</a>
     <div class="container">
         <div class="header">
             <h2>🔍 Threat Hunting Approaches</h2>
@@ -672,9 +695,8 @@
                 iocBox.innerHTML = `
                     <div style="color: #60a5fa; font-weight: 600; font-size: 14px; margin-bottom: 8px;">Threat Intel IOCs:</div>
                     <div style="font-family: monospace; font-size: 12px; color: ${step >= 1 ? '#fde047' : '#cbd5e1'};">
-                        <div>IP: 192.168.1.100</div>
-                        <div>Hash: a3f5e9...</div>
-                        <div>Domain: malicious.com</div>
+                        <div>IP: 66.96.146.129</div>
+                        <div>Domain: evil.com/div>
                     </div>
                 `;
                 canvas.appendChild(iocBox);
@@ -703,7 +725,7 @@
                 matchBox.innerHTML = `
                     <div style="color: #f87171; font-weight: bold; font-size: 18px; margin-bottom: 8px;">✓ Match Found!</div>
                     <div style="color: #cbd5e1; font-size: 14px;">Confirmed threat in network logs</div>
-                    <div style="color: #fca5a5; font-size: 12px; font-family: monospace; margin-top: 8px;">IP: 192.168.1.100 (3 occurrences)</div>
+                    <div style="color: #fca5a5; font-size: 12px; font-family: monospace; margin-top: 8px;">IP: 66.96.146.129 (3 occurrences)</div>
                 `;
                 canvas.appendChild(matchBox);
             }
